@@ -1,16 +1,17 @@
-
 import 'package:flutter/material.dart';
-/// The class for the file browser screen
+
+/// The class for the Editor screen
 /// 
-class Browser extends StatelessWidget {
-  const Browser({super.key});
+class Editor extends StatelessWidget {
+  const Editor({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold (
+      appBar: AppBar(),
       body: Column(
         children: [
-          Text("Browser Screen coming soon!"),
+          Text("Editor Screen coming soon!"),
           Placeholder(),
         ],
       )

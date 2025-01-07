@@ -1,4 +1,5 @@
 import 'package:dreamkeeper/pages/index/index.dart';
+import 'package:dreamkeeper/sitemap.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,8 +18,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      // onGenerateRoute:RouteGenerator.generateRoute,
-      home: const Index(),
+      onGenerateRoute: Sitemap.generateRoute, // callback for dynamic routing
+      home: const Index(), // entry point to the app
     );
   }
 }

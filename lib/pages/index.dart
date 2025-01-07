@@ -1,3 +1,4 @@
+import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 // Import Page widgets for the nav bar
 import 'pages/browser.dart';
@@ -32,8 +33,7 @@ class _IndexState extends State<Index> {
       _buildTabsButton(),
     ];
     // The list
-    final isMobile = Theme.of(context).platform == TargetPlatform.iOS ||
-                     Theme.of(context).platform == TargetPlatform.android;
+    final isMobile = contextIsMobile(context);
 
     // Navigator.of(context).pushNamed()
     return Scaffold(
