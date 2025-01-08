@@ -1,7 +1,7 @@
-import 'package:dreamkeeper/pages/index/pages/editor.dart';
+import 'package:dreamkeeper/pages/editor.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dreamkeeper/pages/index/index.dart';
+import 'package:dreamkeeper/pages/index.dart';
 
 
 /// This is a class which defines the 'sitemap' of the app

@@ -1,6 +1,8 @@
-import 'package:dreamkeeper/pages/index/index.dart';
+import 'package:dreamkeeper/pages/index.dart';
 import 'package:dreamkeeper/sitemap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/translations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +22,12 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: Sitemap.generateRoute, // callback for dynamic routing
       home: const Index(), // entry point to the app
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FlutterQuillLocalizations.delegate
+      ],
     );
   }
 }
