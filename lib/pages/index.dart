@@ -1,9 +1,9 @@
 import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 // Import Page widgets for the nav bar
-import 'index/browser.dart';
-import 'index/search.dart';
-import 'index/tabs.dart';
+import 'pages/browser.dart';
+import 'pages/search.dart';
+import 'pages/tabs.dart';
 
 /// index.dart
 /// 
