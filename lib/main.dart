@@ -1,4 +1,4 @@
-import 'package:dreamkeeper/pages/index/index.dart';
+import 'package:dreamkeeper/pages/index.dart';
 import 'package:dreamkeeper/sitemap.dart';
 import 'package:flutter/material.dart';
 
