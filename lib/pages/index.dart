@@ -1,16 +1,18 @@
+import 'package:dreamkeeper/style/text_styles.dart';
 import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 // Import Page widgets for the nav bar
-import 'package:dreamkeeper/pages/index/browser.dart';
-import 'package:dreamkeeper/pages/index/search.dart';
-import 'package:dreamkeeper/pages/index/tabs.dart';
+import 'package:dreamkeeper/components/index/feeds_list.dart';
+import 'package:dreamkeeper/components/index/search.dart';
+import 'package:dreamkeeper/components/index/tabs.dart';
+
 /// index.dart
-/// 
+///
 /// The Home page of the app
 /// A navigation bar which is able to render widgets related to the core functionalities
 /// Can display contents relating to file browsing, searching for notes and the editor
 /// Access: Public
-/// 
+///
 class Index extends StatefulWidget {
   const Index({super.key});
 
@@ -19,17 +21,16 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+  static const double iconSize = 42.0;
   Widget _currentView = Search();
-
 
   @override
   Widget build(BuildContext context) {
-
     // The List of buttons in the nav bar
-    final List<IconButton> destinations = [
-      _buildBrowserButton(), 
-      _buildSearchButton(),
-      _buildTabsButton(),
+    final List<Widget> destinations = [
+      browserButton(),
+      searchButton(),
+      tabsButton(),
     ];
     // The list
     final isMobile = contextIsMobile(context);
@@ -37,36 +38,47 @@ class _IndexState extends State<Index> {
     // Navigator.of(context).pushNamed()
     return Scaffold(
       body: SafeArea(child: _currentView),
-      appBar: isMobile ? null : AppBar(
-        actions: destinations,
-      ),
-      bottomNavigationBar: !isMobile ? null : BottomAppBar(
-        child: Row(
-          children: destinations,
-        ),
-      ),
+      appBar: isMobile
+          ? AppBar(
+              title: Text(
+              "dreamkeeper",
+              style: h1,
+            ))
+          : AppBar(
+              title: Text("dreamkeeper"),
+              actions: destinations,
+            ),
+      bottomNavigationBar: !isMobile
+          ? null
+          : BottomAppBar(
+              child: Row(
+                children: destinations.map((e) => Expanded(child: e)).toList(),
+              ),
+            ),
     );
   }
 
-
-  IconButton _buildBrowserButton() {
+  IconButton browserButton() {
     return IconButton(
       icon: const Icon(Icons.folder),
-      onPressed: () => setState(() => _currentView= const Browser()),
+      iconSize: iconSize,
+      onPressed: () => setState(() => _currentView = const FeedsList()),
     );
   }
 
-  IconButton _buildSearchButton() {
+  IconButton searchButton() {
     return IconButton(
       icon: const Icon(Icons.search),
-      onPressed: () => setState(() => _currentView= const Search()),
+      iconSize: iconSize,
+      onPressed: () => setState(() => _currentView = const Search()),
     );
   }
-  IconButton _buildTabsButton() {
+
+  IconButton tabsButton() {
     return IconButton(
-      icon: const Icon(Icons.square),
-      onPressed: () => setState(() => _currentView= const Tabs()),
+      icon: const Icon(Icons.check_box_outline_blank),
+      iconSize: iconSize,
+      onPressed: () => setState(() => _currentView = const Tabs()),
     );
   }
 }
-

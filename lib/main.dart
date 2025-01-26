@@ -1,8 +1,15 @@
+import 'package:dreamkeeper/database/objectbox.dart';
 import 'package:dreamkeeper/pages/index.dart';
 import 'package:dreamkeeper/sitemap.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+late ObjectBox objectbox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  
+  objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }
 
@@ -13,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'dreamkeeper',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,

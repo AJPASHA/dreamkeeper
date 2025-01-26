@@ -15,7 +15,11 @@ class Search extends StatelessWidget {
           Text("Search Screen coming soon!"),
           Placeholder(),
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pushNamed('/editor'),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

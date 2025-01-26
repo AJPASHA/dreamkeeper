@@ -1,4 +1,6 @@
+import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/pages/editor.dart';
+import 'components/index/feed_stream.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dreamkeeper/pages/index.dart';
@@ -15,7 +17,17 @@ class Sitemap {
       case '/':
         return MaterialPageRoute(builder: (context) => Index());
       case '/editor':
+        if (args is EditorArgs){
+          return MaterialPageRoute(builder: (context) => Editor(loadedDocument: args.document));
+        }
         return MaterialPageRoute(builder: (context) => Editor());
+      case '/feed':
+        if (args is FeedArgs) {
+          return MaterialPageRoute(builder: (context) => FeedStream(feed: args.feed));
+        } else {
+          //TODO: create an error page
+          return MaterialPageRoute(builder: (context) => Index());
+        }
       // case '/settings':
       //   return MaterialPageRoute(builder: (context) => Settings());
       // case '/sign-up':
@@ -37,3 +49,14 @@ class Sitemap {
 // ├─ "/settings" // settings screen
 // ├─ "/sign-up"
 // ├─ "/sign-in"
+
+
+class FeedArgs {
+  final Feed feed;
+  FeedArgs(this.feed);
+}
+
+class EditorArgs {
+  final DreamkeeperDocument? document;
+  EditorArgs(this.document);
+}
