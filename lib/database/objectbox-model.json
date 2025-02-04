@@ -1,0 +1,201 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2675847420505076543",
+      "lastPropertyId": "3:6007357884080982916",
+      "name": "BlockVector",
+      "properties": [
+        {
+          "id": "1:6328327352204386913",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8544314459225515504",
+          "name": "documentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:6853578938301794265",
+          "relationTarget": "DreamkeeperDocument"
+        },
+        {
+          "id": "3:6007357884080982916",
+          "name": "blockId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:7869460569440935827",
+          "relationTarget": "DocumentBlock"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1904111289124073799",
+      "lastPropertyId": "5:1863663107051040057",
+      "name": "DocumentBlock",
+      "properties": [
+        {
+          "id": "1:6965360099172755903",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:699639639355947395",
+          "name": "blockNumber",
+          "type": 6
+        },
+        {
+          "id": "3:6500228856623463333",
+          "name": "plaintext",
+          "type": 9
+        },
+        {
+          "id": "4:4093164196411766370",
+          "name": "documentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:7118222247900652012",
+          "relationTarget": "DreamkeeperDocument"
+        },
+        {
+          "id": "5:1863663107051040057",
+          "name": "embeddingId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:2768205539878833320",
+          "relationTarget": "BlockVector"
+        }
+      ],
+      "relations": [
+        {
+          "id": "4:5210723107418831646",
+          "name": "entries",
+          "targetId": "5:2447803695644195486"
+        }
+      ]
+    },
+    {
+      "id": "3:5072485273022926526",
+      "lastPropertyId": "4:3074566525603366904",
+      "name": "DreamkeeperDocument",
+      "properties": [
+        {
+          "id": "1:5324606972050200035",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4592375958659850233",
+          "name": "content",
+          "type": 9
+        },
+        {
+          "id": "3:4472523615307382233",
+          "name": "createdOn",
+          "type": 10
+        },
+        {
+          "id": "4:3074566525603366904",
+          "name": "editedOn",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:9222437547379108457",
+      "lastPropertyId": "4:5838987186544833151",
+      "name": "Feed",
+      "properties": [
+        {
+          "id": "1:3675839831431150906",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5174166070797647372",
+          "name": "title",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "5:4731260858194973115"
+        },
+        {
+          "id": "3:8946571422089713458",
+          "name": "deletable",
+          "type": 1
+        },
+        {
+          "id": "4:5838987186544833151",
+          "name": "lastViewed",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:2447803695644195486",
+      "lastPropertyId": "6:8292300676565072553",
+      "name": "FeedEntry",
+      "properties": [
+        {
+          "id": "1:3251026472852682301",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:474926429931660973",
+          "name": "dateRecommendedToUser",
+          "type": 10
+        },
+        {
+          "id": "3:5943826710688967312",
+          "name": "dateBlacklistedByUser",
+          "type": 10
+        },
+        {
+          "id": "4:8664219073481760629",
+          "name": "feedId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:155353596200286940",
+          "relationTarget": "Feed"
+        },
+        {
+          "id": "5:6633187234008207953",
+          "name": "documentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:7499596532061033826",
+          "relationTarget": "DreamkeeperDocument"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "5:2447803695644195486",
+  "lastIndexId": "7:7499596532061033826",
+  "lastRelationId": "5:3226915327935833438",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    8292300676565072553
+  ],
+  "retiredRelationUids": [
+    3383744319323622071,
+    7059936845439524170,
+    8151844155431242869,
+    3226915327935833438
+  ],
+  "version": 1
+}
