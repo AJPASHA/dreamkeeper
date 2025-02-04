@@ -57,6 +57,9 @@ class FeedEntry {
 
   final feed = ToOne<Feed>();
   final document = ToOne<DreamkeeperDocument>();
+
+  @Backlink('entries')
+  final blocks = ToMany<DocumentBlock>();
 }
 
 @Entity()
@@ -113,6 +116,7 @@ class DocumentBlock {
   final document = ToOne<DreamkeeperDocument>();
   final embedding = ToOne<BlockVector>();
 
+  final entries = ToMany<FeedEntry>();
 }
 
 // TODO: change the length of the embedding field based on size of model being used

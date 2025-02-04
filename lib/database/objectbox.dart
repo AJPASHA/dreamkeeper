@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 
 import 'objectbox.g.dart';
 import 'model.dart';
@@ -91,27 +91,34 @@ class ObjectBox {
 
   /// get a list of all entries within a feed
   Stream<List<FeedEntry>> getEntries(int feedId) {
-    final builder = feedEntryBox.query();//(FeedEntry_.feed.equals(feedId));
-
+    final builder = feedEntryBox.query(FeedEntry_.feed.equals(feedId));
+    builder.link(FeedEntry_.document);
+    debugPrint("Getting Entries");
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
   /* Update */
 
   /// Save a document
-  void saveDocument(int id, String documentContent) {
+  void saveDocument(DreamkeeperDocument document) {
     // TODO: Make this Async?
-    DreamkeeperDocument document = DreamkeeperDocument(documentContent, id: id);
-    document.blocks.addAll(_getBlocksFromDocument(document));
+    
 
     //Since objectbox does not seem to handle cascading deletes, we handle deletes to the blocks within a trx
     store.runInTransaction(TxMode.write, () {
       // blockBox.removeMany(ids)
-      blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
+      blockBox.query(DocumentBlock_.document.equals(document.id)).build().remove();
+      List<DocumentBlock> blocks = _getBlocksFromDocument(document);
+      document.blocks.addAll(blocks);
+
       documentBox.put(document);
+
+
+      // document.blocks.firstOrNull
       // TODO: insert vector update operations here (probably needs to be async)
     });
     
+    debugPrint("Document Saved!");
   }
 
   /* Delete */
@@ -120,6 +127,8 @@ class ObjectBox {
   void deleteDocument(int id) {
     store.runInTransaction(TxMode.write, () {
       blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
+      blockVectorBox.query(BlockVector_.document.equals(id)).build().remove();
+      feedEntryBox.query(FeedEntry_.document.equals(id)).build().remove();
       documentBox.remove(id);
       // TODO: insert vector delete operations
     });

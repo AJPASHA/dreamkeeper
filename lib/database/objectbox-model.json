@@ -71,7 +71,13 @@
           "relationTarget": "BlockVector"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "4:5210723107418831646",
+          "name": "entries",
+          "targetId": "5:2447803695644195486"
+        }
+      ]
     },
     {
       "id": "3:5072485273022926526",
@@ -135,7 +141,7 @@
     },
     {
       "id": "5:2447803695644195486",
-      "lastPropertyId": "5:6633187234008207953",
+      "lastPropertyId": "6:8292300676565072553",
       "name": "FeedEntry",
       "properties": [
         {
@@ -176,17 +182,20 @@
   ],
   "lastEntityId": "5:2447803695644195486",
   "lastIndexId": "7:7499596532061033826",
-  "lastRelationId": "3:8151844155431242869",
+  "lastRelationId": "5:3226915327935833438",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    8292300676565072553
+  ],
   "retiredRelationUids": [
     3383744319323622071,
     7059936845439524170,
-    8151844155431242869
+    8151844155431242869,
+    3226915327935833438
   ],
   "version": 1
 }
