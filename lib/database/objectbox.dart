@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:dreamkeeper/services/text_embedding_service.dart';
 import 'package:flutter/material.dart';
 
 import 'objectbox.g.dart';
 import 'model.dart';
+
+TextEmbeddingService embeddingService = TextEmbeddingService();
 
 class ObjectBox {
   late final Store store;
@@ -71,6 +74,24 @@ class ObjectBox {
     return feedEntryBox.put(entry);
   }
 
+  /// Generate embeddings for a list of document blocks
+  Future<List<DocumentBlock>> generateEmbeddings(List<DocumentBlock> blocks) async {
+    final List<String> texts = blocks.map((e) => e.plaintext).toList();
+    final EmbeddingResponse response = await embeddingService.getEmbeddings(texts, EmbeddingPassageType.passage) as EmbeddingResponse; // force cast as errors should occur in API service code
+    final embeddings = response.embeddings;
+    for (final i in List.generate(blocks.length, (i) => i, growable: false)) {
+      final embedding = BlockVector(embeddings[i]);
+      embedding.block.target = blocks[i];
+      blocks[i].embedding.target = embedding;
+    }
+    // for (var e in blocks) {
+    //   debugPrint("${e.embedding.target?.vector}");
+    // }
+
+    blockBox.putManyAsync(blocks); // don't think we need to await this, can happen in it's own time
+    return blocks;
+  }
+
   // entities representing document metadata (blocks, vectors) are abstracted away from the API so we don't have public setters or getters for them
 
   /* Read */
@@ -86,15 +107,19 @@ class ObjectBox {
     return builder.watch(triggerImmediately: true).map((query) => query.find());
       
   }
-  // TODO: Figure out how to handle entries 
-
 
   /// get a list of all entries within a feed
   Stream<List<FeedEntry>> getEntries(int feedId) {
     final builder = feedEntryBox.query(FeedEntry_.feed.equals(feedId));
     builder.link(FeedEntry_.document);
-    debugPrint("Getting Entries");
     return builder.watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  /// Get a list of all document blocks that don't have a vector
+  /// For use in updating search queries
+  List<DocumentBlock> getBlocksWithoutVectors() {
+    final builder = blockBox.query(DocumentBlock_.embedding.isNull());
+    return builder.build().find();
   }
 
   /* Update */
@@ -111,11 +136,12 @@ class ObjectBox {
       List<DocumentBlock> blocks = _getBlocksFromDocument(document);
       document.blocks.addAll(blocks);
 
+      // scan for missing vectors
+
       documentBox.put(document);
 
+      generateEmbeddings(blocks); // this might want to be async
 
-      // document.blocks.firstOrNull
-      // TODO: insert vector update operations here (probably needs to be async)
     });
     
     debugPrint("Document Saved!");
@@ -137,8 +163,13 @@ class ObjectBox {
 
   /*** Utils ***/
 
-  /// Get a list of plaintext blocks from a document
+  /// Get a list of plaintext blocks from a document, by default, these have an overlap and a minimum preferred size. 
+  /// This ensures that the vectors generated from the blocks are long enough to be meaningful (except where the user hasn't written a coherent thought down)
+  /// This also means that document blocks are not mutually exclusive from one another and are not commutative 'building blocks' from which you can rebuild a doc
   List<DocumentBlock> _getBlocksFromDocument(DreamkeeperDocument document) {
+    // TODO: alter this so that it generates blocks that are less than the max token count for the embedding model 512*(3/4)= 384 words long
+    // TODO: add minimum length and standard overlap arguments, this ensures that where we have a sequence that is slightly over the limit, we don't get stubs
+
     List<dynamic> components = jsonDecode(document.content);
 
     List<DocumentBlock> blocks = [];
@@ -155,4 +186,5 @@ class ObjectBox {
     }
     return blocks;
   }
+
 }

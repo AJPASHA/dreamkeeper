@@ -133,11 +133,10 @@ class BlockVector {
   /// - [block]: A reference to the DocumentBlock that this block vector is associated with.
   @Id() int id;
 
-  // @HnswIndex(dimensions: 512) @Property(type: PropertyType.floatVector)
-  // List<double> vector;
+  @HnswIndex(dimensions: 1024) @Property(type: PropertyType.floatVector)
+  List<double> vector;
 
-  BlockVector({this.id=0});
-  // BlockVector(this.vector, {this.id=0});
+  BlockVector(this.vector, {this.id=0});
 
   final document = ToOne<DreamkeeperDocument>();
   final block = ToOne<DocumentBlock>();

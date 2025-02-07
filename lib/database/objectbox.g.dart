@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 2675847420505076543),
       name: 'BlockVector',
-      lastPropertyId: const obx_int.IdUid(3, 6007357884080982916),
+      lastPropertyId: const obx_int.IdUid(4, 6879840963101483828),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -43,7 +43,16 @@ final _entities = <obx_int.ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const obx_int.IdUid(2, 7869460569440935827),
-            relationTarget: 'DocumentBlock')
+            relationTarget: 'DocumentBlock'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 6879840963101483828),
+            name: 'vector',
+            type: 28,
+            flags: 8,
+            indexId: const obx_int.IdUid(8, 7380202757269972779),
+            hnswParams: obx_int.ModelHnswParams(
+              dimensions: 1024,
+            ))
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
@@ -236,7 +245,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
       lastEntityId: const obx_int.IdUid(5, 2447803695644195486),
-      lastIndexId: const obx_int.IdUid(7, 7499596532061033826),
+      lastIndexId: const obx_int.IdUid(8, 7380202757269972779),
       lastRelationId: const obx_int.IdUid(5, 3226915327935833438),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -262,19 +271,24 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (BlockVector object, fb.Builder fbb) {
-          fbb.startTable(4);
+          final vectorOffset = fbb.writeListFloat32(object.vector);
+          fbb.startTable(5);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.document.targetId);
           fbb.addInt64(2, object.block.targetId);
+          fbb.addOffset(3, vectorOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
         objectFromFB: (obx.Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
+          final vectorParam =
+              const fb.ListReader<double>(fb.Float32Reader(), lazy: false)
+                  .vTableGet(buffer, rootOffset, 10, []);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object = BlockVector(id: idParam);
+          final object = BlockVector(vectorParam, id: idParam);
           object.document.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
           object.document.attach(store);
@@ -494,6 +508,10 @@ class BlockVector_ {
   /// See [BlockVector.block].
   static final block = obx.QueryRelationToOne<BlockVector, DocumentBlock>(
       _entities[0].properties[2]);
+
+  /// See [BlockVector.vector].
+  static final vector =
+      obx.QueryHnswProperty<BlockVector>(_entities[0].properties[3]);
 }
 
 /// [DocumentBlock] entity fields to define ObjectBox queries.

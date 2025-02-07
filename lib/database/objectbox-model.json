@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:2675847420505076543",
-      "lastPropertyId": "3:6007357884080982916",
+      "lastPropertyId": "4:6879840963101483828",
       "name": "BlockVector",
       "properties": [
         {
@@ -29,6 +29,13 @@
           "flags": 520,
           "indexId": "2:7869460569440935827",
           "relationTarget": "DocumentBlock"
+        },
+        {
+          "id": "4:6879840963101483828",
+          "name": "vector",
+          "type": 28,
+          "flags": 8,
+          "indexId": "8:7380202757269972779"
         }
       ],
       "relations": []
@@ -181,7 +188,7 @@
     }
   ],
   "lastEntityId": "5:2447803695644195486",
-  "lastIndexId": "7:7499596532061033826",
+  "lastIndexId": "8:7380202757269972779",
   "lastRelationId": "5:3226915327935833438",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

@@ -10,6 +10,7 @@ Future<void> main() async {
 
   
   objectbox = await ObjectBox.create();
+
   runApp(const MyApp());
 }
 
