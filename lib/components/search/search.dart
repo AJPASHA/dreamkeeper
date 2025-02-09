@@ -1,17 +1,21 @@
 
 
+import 'package:dreamkeeper/router.dart';
 import 'package:flutter/material.dart';
+import '../../services/text_embedding_service.dart';
 
 /// The class for the search bar screen
 /// 
 class Search extends StatefulWidget {
   const Search({super.key});
-
   @override
   State<Search> createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> {
+  TextEmbeddingService embeddingService = TextEmbeddingService();
+  // TODO: remove from startup, this is just while we are developing and everything is moving aroudn a lot
+
   @override
   Widget build(BuildContext context) {
     return Scaffold (
@@ -21,9 +25,9 @@ class _SearchState extends State<Search> {
             return SearchBar(
               controller: controller,
               padding: WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: (){},
-              onChanged:(_){},
-              onSubmitted: (value)=> debugPrint(value),
+              // onTap: (){},
+              // onChanged:(_){},
+              onSubmitted: (String value) => Navigator.of(context).pushNamed('/search_results', arguments: SearchArgs(value)),
               leading: const Icon(Icons.search),
               
             );
