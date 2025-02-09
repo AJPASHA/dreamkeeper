@@ -32,7 +32,7 @@ class _EditorState extends State<Editor> {
     final document = getDocumentFromString(widget.dbDocument.content);
     _quillController = QuillController(
         document: document,
-        selection: TextSelection(baseOffset: 0, extentOffset: 0));
+        selection: TextSelection(baseOffset: 0, extentOffset: 0)); // TODO: change this to be able to take the starting point of a block.
 
     _quillController!.document.changes
         .listen((event) => handleEdit(event)); // listen for keystrokes
