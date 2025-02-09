@@ -1,3 +1,4 @@
+import 'package:dreamkeeper/components/search/search_results.dart';
 import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/pages/editor.dart';
 import 'components/feed_stream/feed_stream.dart';
@@ -46,12 +47,12 @@ class Sitemap {
         } else {
           return MaterialPageRoute(builder: (context) => ErrorPage());
         }
-      // case '/settings':
-      //   return MaterialPageRoute(builder: (context) => Settings());
-      // case '/sign-up':
-      //   return MaterialPageRoute(builder: (context) => SignUp());
-      // case '/sign-in':
-      //   return MaterialPageRoute(builder: (context) => SignIn());
+      case '/search_results':
+        if (args is SearchArgs) {
+          return MaterialPageRoute(builder: (context) => SearchResults(args.query));
+        } else {
+          return MaterialPageRoute(builder: (context) => ErrorPage());
+        }
       default:
         return MaterialPageRoute(builder: (context) => ErrorPage());
     }
@@ -67,4 +68,9 @@ class EditorArgs {
   final DreamkeeperDocument? document;
   final Feed? fromFeed;
   EditorArgs({this.document, this.fromFeed});
+}
+
+class SearchArgs {
+  final String query;
+  SearchArgs(this.query);
 }

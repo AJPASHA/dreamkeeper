@@ -1,5 +1,6 @@
 
 
+import 'package:dreamkeeper/router.dart';
 import 'package:flutter/material.dart';
 import '../../services/text_embedding_service.dart';
 
@@ -24,12 +25,9 @@ class _SearchState extends State<Search> {
             return SearchBar(
               controller: controller,
               padding: WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: (){},
-              onChanged:(_){},
-              onSubmitted: (value) async {
-                EmbeddingResponse? res = await embeddingService.getEmbeddings([controller.text], EmbeddingPassageType.query);
-                debugPrint("${res?.embeddings[0]}");
-              },
+              // onTap: (){},
+              // onChanged:(_){},
+              onSubmitted: (String value) => Navigator.of(context).pushNamed('/search_results', arguments: SearchArgs(value)),
               leading: const Icon(Icons.search),
               
             );

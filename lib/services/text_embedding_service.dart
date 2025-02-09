@@ -23,7 +23,6 @@ class TextEmbeddingService {
       case EmbeddingPassageType.query: prefix = "Query";
     }
     texts = texts.map((text) => "$prefix: $text").toList();
-
     Map<String, String> headers = <String, String>{
       "Authorization": "bearer 1ZRoR5bOMvXBW0vpPO28vqHs4CBZLrNc" // TODO: This is a security flaw, Must fix before launch
     };
@@ -32,18 +31,19 @@ class TextEmbeddingService {
       "inputs": texts,
       "normalize": "true"
     };
-
+    debugPrint("Calling DeepInfra");
     Response res = await post(
       Uri.parse(baseURL), 
       headers: headers,
       body: jsonEncode(body)
     );
-    debugPrint("${res.statusCode}");
+    debugPrint("Response status: ${res.statusCode}");
     switch (res.statusCode){
       case 200: 
         Map<String, dynamic> body = jsonDecode(res.body);
         EmbeddingResponse embedding = EmbeddingResponse.fromJson(body);
         return embedding;
+      case 422: throw "422 malformed request\n request body: ${jsonEncode(body)}";
       case 429:
         debugPrint("Servers busy, you will need to retry later"); // don't want an exception here
         // TODO: modify this function so that it can call itself for retries up to x number of times

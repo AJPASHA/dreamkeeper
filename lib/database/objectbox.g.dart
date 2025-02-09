@@ -20,108 +20,108 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 2675847420505076543),
+      id: const obx_int.IdUid(1, 6691388115344980118),
       name: 'BlockVector',
-      lastPropertyId: const obx_int.IdUid(4, 6879840963101483828),
+      lastPropertyId: const obx_int.IdUid(4, 8641359063529108117),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6328327352204386913),
+            id: const obx_int.IdUid(1, 2091572012486844469),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 8544314459225515504),
-            name: 'documentId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(1, 6853578938301794265),
-            relationTarget: 'DreamkeeperDocument'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 6007357884080982916),
-            name: 'blockId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(2, 7869460569440935827),
-            relationTarget: 'DocumentBlock'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 6879840963101483828),
+            id: const obx_int.IdUid(2, 5430075617303078917),
             name: 'vector',
             type: 28,
             flags: 8,
-            indexId: const obx_int.IdUid(8, 7380202757269972779),
+            indexId: const obx_int.IdUid(1, 4246200471850408533),
             hnswParams: obx_int.ModelHnswParams(
               dimensions: 1024,
-            ))
+            )),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5472198982344898249),
+            name: 'documentId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(2, 5728966610188314852),
+            relationTarget: 'DreamkeeperDocument'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 8641359063529108117),
+            name: 'blockId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(3, 8059908447494620276),
+            relationTarget: 'DocumentBlock')
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(2, 1904111289124073799),
+      id: const obx_int.IdUid(2, 4723191242937751035),
       name: 'DocumentBlock',
-      lastPropertyId: const obx_int.IdUid(5, 1863663107051040057),
+      lastPropertyId: const obx_int.IdUid(5, 5471113307544169732),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6965360099172755903),
+            id: const obx_int.IdUid(1, 3778559177730409910),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 699639639355947395),
+            id: const obx_int.IdUid(2, 3098392986865368127),
             name: 'blockNumber',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 6500228856623463333),
+            id: const obx_int.IdUid(3, 6243292989227931787),
             name: 'plaintext',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4093164196411766370),
+            id: const obx_int.IdUid(4, 3064470972478294223),
             name: 'documentId',
             type: 11,
             flags: 520,
-            indexId: const obx_int.IdUid(3, 7118222247900652012),
+            indexId: const obx_int.IdUid(4, 2963555873112504253),
             relationTarget: 'DreamkeeperDocument'),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 1863663107051040057),
+            id: const obx_int.IdUid(5, 5471113307544169732),
             name: 'embeddingId',
             type: 11,
             flags: 520,
-            indexId: const obx_int.IdUid(4, 2768205539878833320),
+            indexId: const obx_int.IdUid(5, 4022869141944294176),
             relationTarget: 'BlockVector')
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
-            id: const obx_int.IdUid(4, 5210723107418831646),
+            id: const obx_int.IdUid(1, 4774840839488652682),
             name: 'entries',
-            targetId: const obx_int.IdUid(5, 2447803695644195486))
+            targetId: const obx_int.IdUid(5, 1912403237753163858))
       ],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 5072485273022926526),
+      id: const obx_int.IdUid(3, 3723456336141624893),
       name: 'DreamkeeperDocument',
-      lastPropertyId: const obx_int.IdUid(4, 3074566525603366904),
+      lastPropertyId: const obx_int.IdUid(4, 8977304473397017821),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5324606972050200035),
+            id: const obx_int.IdUid(1, 3557064869485250754),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 4592375958659850233),
+            id: const obx_int.IdUid(2, 2866602453867876714),
             name: 'content',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 4472523615307382233),
+            id: const obx_int.IdUid(3, 3497219289858391775),
             name: 'createdOn',
             type: 10,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 3074566525603366904),
+            id: const obx_int.IdUid(4, 8977304473397017821),
             name: 'editedOn',
             type: 10,
             flags: 0)
@@ -134,29 +134,29 @@ final _entities = <obx_int.ModelEntity>[
             name: 'blocks', srcEntity: 'DocumentBlock', srcField: 'document')
       ]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 9222437547379108457),
+      id: const obx_int.IdUid(4, 3293590381576595942),
       name: 'Feed',
-      lastPropertyId: const obx_int.IdUid(4, 5838987186544833151),
+      lastPropertyId: const obx_int.IdUid(4, 3911093958662350059),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 3675839831431150906),
+            id: const obx_int.IdUid(1, 4857425438953874427),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 5174166070797647372),
+            id: const obx_int.IdUid(2, 1945395708186987787),
             name: 'title',
             type: 9,
             flags: 2080,
-            indexId: const obx_int.IdUid(5, 4731260858194973115)),
+            indexId: const obx_int.IdUid(6, 7788821042470211284)),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8946571422089713458),
+            id: const obx_int.IdUid(3, 6974864555990576667),
             name: 'deletable',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 5838987186544833151),
+            id: const obx_int.IdUid(4, 3911093958662350059),
             name: 'lastViewed',
             type: 10,
             flags: 0)
@@ -167,39 +167,39 @@ final _entities = <obx_int.ModelEntity>[
             name: 'entries', srcEntity: 'FeedEntry', srcField: 'feed')
       ]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(5, 2447803695644195486),
+      id: const obx_int.IdUid(5, 1912403237753163858),
       name: 'FeedEntry',
-      lastPropertyId: const obx_int.IdUid(6, 8292300676565072553),
+      lastPropertyId: const obx_int.IdUid(5, 557536182362492375),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 3251026472852682301),
+            id: const obx_int.IdUid(1, 5826054173663877518),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 474926429931660973),
+            id: const obx_int.IdUid(2, 8647789802359358142),
             name: 'dateRecommendedToUser',
             type: 10,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5943826710688967312),
+            id: const obx_int.IdUid(3, 5079879573046447747),
             name: 'dateBlacklistedByUser',
             type: 10,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 8664219073481760629),
+            id: const obx_int.IdUid(4, 7183595573995758517),
             name: 'feedId',
             type: 11,
             flags: 520,
-            indexId: const obx_int.IdUid(6, 155353596200286940),
+            indexId: const obx_int.IdUid(7, 207717962876861589),
             relationTarget: 'Feed'),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 6633187234008207953),
+            id: const obx_int.IdUid(5, 557536182362492375),
             name: 'documentId',
             type: 11,
             flags: 520,
-            indexId: const obx_int.IdUid(7, 7499596532061033826),
+            indexId: const obx_int.IdUid(8, 3181323502567621486),
             relationTarget: 'DreamkeeperDocument')
       ],
       relations: <obx_int.ModelRelation>[],
@@ -244,19 +244,14 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(5, 2447803695644195486),
-      lastIndexId: const obx_int.IdUid(8, 7380202757269972779),
-      lastRelationId: const obx_int.IdUid(5, 3226915327935833438),
+      lastEntityId: const obx_int.IdUid(5, 1912403237753163858),
+      lastIndexId: const obx_int.IdUid(8, 3181323502567621486),
+      lastRelationId: const obx_int.IdUid(1, 4774840839488652682),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [8292300676565072553],
-      retiredRelationUids: const [
-        3383744319323622071,
-        7059936845439524170,
-        8151844155431242869,
-        3226915327935833438
-      ],
+      retiredPropertyUids: const [],
+      retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
@@ -274,9 +269,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final vectorOffset = fbb.writeListFloat32(object.vector);
           fbb.startTable(5);
           fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.document.targetId);
-          fbb.addInt64(2, object.block.targetId);
-          fbb.addOffset(3, vectorOffset);
+          fbb.addOffset(1, vectorOffset);
+          fbb.addInt64(2, object.document.targetId);
+          fbb.addInt64(3, object.block.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -285,15 +280,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final vectorParam =
               const fb.ListReader<double>(fb.Float32Reader(), lazy: false)
-                  .vTableGet(buffer, rootOffset, 10, []);
+                  .vTableGet(buffer, rootOffset, 6, []);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final object = BlockVector(vectorParam, id: idParam);
           object.document.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
           object.document.attach(store);
           object.block.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.block.attach(store);
           return object;
         }),
@@ -302,7 +297,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         toOneRelations: (DocumentBlock object) =>
             [object.document, object.embedding],
         toManyRelations: (DocumentBlock object) => {
-              obx_int.RelInfo<DocumentBlock>.toMany(4, object.id):
+              obx_int.RelInfo<DocumentBlock>.toMany(1, object.id):
                   object.entries
             },
         getId: (DocumentBlock object) => object.id,
@@ -338,7 +333,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           object.embedding.attach(store);
           obx_int.InternalToManyAccess.setRelInfo<DocumentBlock>(object.entries,
-              store, obx_int.RelInfo<DocumentBlock>.toMany(4, object.id));
+              store, obx_int.RelInfo<DocumentBlock>.toMany(1, object.id));
           return object;
         }),
     DreamkeeperDocument: obx_int.EntityDefinition<DreamkeeperDocument>(
@@ -441,7 +436,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         model: _entities[4],
         toOneRelations: (FeedEntry object) => [object.feed, object.document],
         toManyRelations: (FeedEntry object) => {
-              obx_int.RelInfo<DocumentBlock>.toManyBacklink(4, object.id):
+              obx_int.RelInfo<DocumentBlock>.toManyBacklink(1, object.id):
                   object.blocks
             },
         getId: (FeedEntry object) => object.id,
@@ -449,7 +444,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (FeedEntry object, fb.Builder fbb) {
-          fbb.startTable(7);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.dateRecommendedToUser?.millisecondsSinceEpoch);
           fbb.addInt64(2, object.dateBlacklistedByUser?.millisecondsSinceEpoch);
@@ -486,7 +481,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           obx_int.InternalToManyAccess.setRelInfo<FeedEntry>(
               object.blocks,
               store,
-              obx_int.RelInfo<DocumentBlock>.toManyBacklink(4, object.id));
+              obx_int.RelInfo<DocumentBlock>.toManyBacklink(1, object.id));
           return object;
         })
   };
@@ -500,18 +495,18 @@ class BlockVector_ {
   static final id =
       obx.QueryIntegerProperty<BlockVector>(_entities[0].properties[0]);
 
+  /// See [BlockVector.vector].
+  static final vector =
+      obx.QueryHnswProperty<BlockVector>(_entities[0].properties[1]);
+
   /// See [BlockVector.document].
   static final document =
       obx.QueryRelationToOne<BlockVector, DreamkeeperDocument>(
-          _entities[0].properties[1]);
+          _entities[0].properties[2]);
 
   /// See [BlockVector.block].
   static final block = obx.QueryRelationToOne<BlockVector, DocumentBlock>(
-      _entities[0].properties[2]);
-
-  /// See [BlockVector.vector].
-  static final vector =
-      obx.QueryHnswProperty<BlockVector>(_entities[0].properties[3]);
+      _entities[0].properties[3]);
 }
 
 /// [DocumentBlock] entity fields to define ObjectBox queries.
