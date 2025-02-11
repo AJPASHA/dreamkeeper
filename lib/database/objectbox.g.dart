@@ -59,7 +59,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 8498441547869950965),
       name: 'DocumentBlock',
-      lastPropertyId: const obx_int.IdUid(5, 8186406677713977854),
+      lastPropertyId: const obx_int.IdUid(6, 4016104214674083446),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -67,16 +67,6 @@ final _entities = <obx_int.ModelEntity>[
             name: 'id',
             type: 6,
             flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 7038815928080113058),
-            name: 'blockNumber',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5245210910484295520),
-            name: 'duration',
-            type: 6,
-            flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(4, 3312115277807237450),
             name: 'documentId',
@@ -90,7 +80,12 @@ final _entities = <obx_int.ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const obx_int.IdUid(5, 6115012636440699710),
-            relationTarget: 'BlockVector')
+            relationTarget: 'BlockVector'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 4016104214674083446),
+            name: 'content',
+            type: 9,
+            flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
@@ -250,7 +245,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [7038815928080113058, 5245210910484295520],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -305,26 +300,23 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (DocumentBlock object, fb.Builder fbb) {
-          fbb.startTable(6);
+          final contentOffset = fbb.writeString(object.content);
+          fbb.startTable(7);
           fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.blockNumber);
-          fbb.addInt64(2, object.duration);
           fbb.addInt64(3, object.document.targetId);
           fbb.addInt64(4, object.embedding.targetId);
+          fbb.addOffset(5, contentOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
         objectFromFB: (obx.Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-          final blockNumberParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
-          final durationParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final contentParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 14, '');
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object =
-              DocumentBlock(blockNumberParam, durationParam, id: idParam);
+          final object = DocumentBlock(contentParam, id: idParam);
           object.document.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.document.attach(store);
@@ -514,22 +506,18 @@ class DocumentBlock_ {
   static final id =
       obx.QueryIntegerProperty<DocumentBlock>(_entities[1].properties[0]);
 
-  /// See [DocumentBlock.blockNumber].
-  static final blockNumber =
-      obx.QueryIntegerProperty<DocumentBlock>(_entities[1].properties[1]);
-
-  /// See [DocumentBlock.duration].
-  static final duration =
-      obx.QueryIntegerProperty<DocumentBlock>(_entities[1].properties[2]);
-
   /// See [DocumentBlock.document].
   static final document =
       obx.QueryRelationToOne<DocumentBlock, DreamkeeperDocument>(
-          _entities[1].properties[3]);
+          _entities[1].properties[1]);
 
   /// See [DocumentBlock.embedding].
   static final embedding = obx.QueryRelationToOne<DocumentBlock, BlockVector>(
-      _entities[1].properties[4]);
+      _entities[1].properties[2]);
+
+  /// See [DocumentBlock.content].
+  static final content =
+      obx.QueryStringProperty<DocumentBlock>(_entities[1].properties[3]);
 
   /// see [DocumentBlock.entries]
   static final entries = obx.QueryRelationToMany<DocumentBlock, FeedEntry>(

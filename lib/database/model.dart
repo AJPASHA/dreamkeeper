@@ -87,9 +87,14 @@ class DreamkeeperDocument {
     : createdOn = createdOn ?? DateTime.now(),
       editedOn = editedOn ?? DateTime.now();
 
+
   /// get the content of the document in a form that it can be manipulated, e.g. for blocks 
   List<Map<String, dynamic>> get contentMap {
     return List<Map<String, dynamic>>.from(jsonDecode(content));
+  }
+
+  String get title {
+    return contentMap.first['insert'];
   }
 
   @Backlink('document')
@@ -106,8 +111,7 @@ class DocumentBlock {
   /// 
   /// Properties:
   /// - [id]: Unique identifier for the document block.
-  /// - [blockNumber]: The index of the first element in the document included in this block
-  /// - [duration]: The number of quill document elements included in the 
+  /// - [content]: The content of the subdocument.
   /// 
   /// Getters:
   /// - [richtext]: get a map of the quill document for 
@@ -117,18 +121,13 @@ class DocumentBlock {
   /// - [embedding]: A reference to the BlockVector representing the embedding of this block.
   @Id()
   int id;
-  int blockNumber; // The location of the block in the quill delta document
-  int duration; // the number of quill data elements in the block
+  String content;
 
-  List<Map<String,dynamic>> get richtext {
-    return List<Map<String, dynamic>>.from(jsonDecode(document.target?.content ?? "")).sublist(blockNumber, blockNumber + duration);
+  String get plaintext {
+    return jsonDecode(content).map((e) => e['insert']).join("");
   }
 
-  String? get plaintext {
-    return richtext.map((e) => e['insert']).join("");
-  }
-
-  DocumentBlock(this.blockNumber, this.duration, {this.id=0});
+  DocumentBlock(this.content, {this.id=0});
 
   final document = ToOne<DreamkeeperDocument>();
   final embedding = ToOne<BlockVector>();

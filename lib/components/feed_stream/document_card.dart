@@ -22,7 +22,7 @@ class _DocumentCardState extends State<DocumentCard> {
   void initState() {
     super.initState();
     document = widget.entry.document.target;
-    title = document?.blocks.firstOrNull?.plaintext;
+    title = document?.title;
   }
 
   @override
