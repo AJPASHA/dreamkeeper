@@ -120,9 +120,12 @@ class _EditorState extends State<Editor> {
             child: QuillSimpleToolbar(controller: _quillController, configurations: toolbarConfig)
           ),
           Expanded(
-            child: QuillEditor.basic(
-              controller: _quillController,
-              configurations: const QuillEditorConfigurations(),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 20, 0),
+              child: QuillEditor.basic(
+                controller: _quillController,
+                configurations: const QuillEditorConfigurations(),
+              ),
             ),
           ),
           KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
