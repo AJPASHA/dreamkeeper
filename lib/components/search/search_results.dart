@@ -66,7 +66,7 @@ class ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? docTitle = resultContent.document.target?.blocks.first.plaintext; // Hmmm, this is long lol
+    final String? docTitle = resultContent.document.target?.title; 
     return GestureDetector(
       onTap: () async => await Navigator.of(context).pushNamed(
                         '/editor',

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:objectbox/objectbox.dart';
 
 /* Objectbox data model for business logic
@@ -7,7 +8,7 @@ import 'package:objectbox/objectbox.dart';
     FeedEntry: A wrapper for the document in a feed which tells us when it was system recommended (if null then it was user generated), 
       and when the user blacklisted it as irrelevant (if null then it should remain visible in the UI)
     Document: The contents of a document
-    DocumentBlock: PlainText blocks of text extracted from the contents of the document
+    DocumentBlock: blocks of the document of an appropriate size for the embedding (stored as a reference to a subset of the document)
     BlockVector: The Embedding
 
 */
@@ -86,6 +87,16 @@ class DreamkeeperDocument {
     : createdOn = createdOn ?? DateTime.now(),
       editedOn = editedOn ?? DateTime.now();
 
+
+  /// get the content of the document in a form that it can be manipulated, e.g. for blocks 
+  List<Map<String, dynamic>> get contentMap {
+    return List<Map<String, dynamic>>.from(jsonDecode(content));
+  }
+
+  String get title {
+    return contentMap.first['insert'];
+  }
+
   @Backlink('document')
   final entries = ToMany<FeedEntry>();
 
@@ -100,18 +111,23 @@ class DocumentBlock {
   /// 
   /// Properties:
   /// - [id]: Unique identifier for the document block.
-  /// - [blockNumber]: The starting line number of the block in the document.
-  /// - [plaintext]: The text content of the block.
+  /// - [content]: The content of the subdocument.
   /// 
+  /// Getters:
+  /// - [richtext]: get a map of the quill document for 
+  /// - [plaintext]: get the plaintext content of the block 
   /// Relationships:
   /// - [document]: A reference to the Document that this block belongs to.
   /// - [embedding]: A reference to the BlockVector representing the embedding of this block.
   @Id()
   int id;
-  int blockNumber; // The location of the block in the quill delta document
-  String plaintext;
+  String content;
 
-  DocumentBlock(this.blockNumber, this.plaintext, {this.id=0});
+  String get plaintext {
+    return jsonDecode(content).map((e) => e['insert']).join("");
+  }
+
+  DocumentBlock(this.content, {this.id=0});
 
   final document = ToOne<DreamkeeperDocument>();
   final embedding = ToOne<BlockVector>();

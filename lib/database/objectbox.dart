@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:dreamkeeper/services/text_embedding_service.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,6 @@ class ObjectBox {
     DreamkeeperDocument document1 = DreamkeeperDocument(
         r'[{"insert":"Demo File"},{"insert":"\n","attributes":{"header":1}},{"insert":"\nLorum Ipsum dolor est.\n\nThis is a list"},{"insert":"\n","attributes":{"list":"ordered"}},{"insert":"This is a list inside a list"},{"insert":"\n","attributes":{"list":"ordered","indent":1}},{"insert":"This is a checkbox"},{"insert":"\n","attributes":{"list":"unchecked"}},{"insert":"This is a ticked checkbox"},{"insert":"\n","attributes":{"list":"checked"}},{"insert":"This is a ticked checkbox within a checkbox "},{"insert":"\n","attributes":{"list":"checked","indent":1}},{"insert":"\n"}]');
     document1.blocks.addAll(_getBlocksFromDocument(document1));
-
 
     FeedEntry feedEntry = FeedEntry();
     feedEntry.document.target = document1;
@@ -104,6 +104,10 @@ class ObjectBox {
 
   /// Perform a nearest neighbours search through the vector index to return a list of document blocks wrapped with their scores
   Future<List<DocumentBlock>> searchBlockVectors(String query) async {
+    if (query.split(" ").length < 3) {
+      query = "Tell me about $query";
+    } // this makes the index a lot better with keyword searches and short queries!
+
     final EmbeddingResponse? res = await embeddingService
         .getEmbeddings([query], EmbeddingPassageType.query);
 
@@ -119,7 +123,10 @@ class ObjectBox {
 
     List<DocumentBlock> results = [];
     for (BlockVector result in vectors) {
-      DocumentBlock? block  = blockBox.query(DocumentBlock_.embedding.equals(result.id)).build().findUnique();
+      DocumentBlock? block = blockBox
+          .query(DocumentBlock_.embedding.equals(result.id))
+          .build()
+          .findUnique();
 
       if (block != null) {
         results.add(block);
@@ -149,8 +156,8 @@ class ObjectBox {
   /// Get a list of all document blocks that don't have a vector
   /// For use in updating search queries
   List<DocumentBlock> getBlocksWithoutVectors() {
-    return blockBox.query(DocumentBlock_.embedding.isNull()).build().find() 
-        + blockBox.query(DocumentBlock_.embedding.equals(0)).build().find();
+    return blockBox.query(DocumentBlock_.embedding.isNull()).build().find() +
+        blockBox.query(DocumentBlock_.embedding.equals(0)).build().find();
   }
 
   /* Update */
@@ -159,8 +166,10 @@ class ObjectBox {
   void refreshVectorIndex() async {
     store.runInTransaction(TxMode.write, () {
       //remove orphans
-      final List<int> orphanedVecIds = 
-          blockVectorBox.query(BlockVector_.block.isNull()).build().findIds() +
+      final List<int> orphanedVecIds = blockVectorBox
+              .query(BlockVector_.block.isNull())
+              .build()
+              .findIds() +
           blockVectorBox.query(BlockVector_.block.equals(0)).build().findIds();
       // debugPrint("There are ${orphanedVecIds.length} vectors without blocks");
       blockVectorBox.removeMany(orphanedVecIds);
@@ -199,35 +208,90 @@ class ObjectBox {
   void deleteDocument(int id) {
     store.runInTransaction(TxMode.write, () {
       blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
-      blockVectorBox.query(BlockVector_.document.equals(id)).build().remove(); // TODO: Bug here when deleting empty doc
+      blockVectorBox
+          .query(BlockVector_.document.equals(id))
+          .build()
+          .remove(); // TODO: Bug here when deleting empty doc
       feedEntryBox.query(FeedEntry_.document.equals(id)).build().remove();
       documentBox.remove(id);
-      // TODO: insert vector delete operations
     });
   }
 
-  /*** Utils ***/
+  /* Utils */
 
-  /// Get a list of plaintext blocks from a document, by default, these have an overlap and a minimum preferred size.
-  /// This ensures that the vectors generated from the blocks are long enough to be meaningful (except where the user hasn't written a coherent thought down)
-  /// This also means that document blocks are not mutually exclusive from one another and are not commutative 'building blocks' from which you can rebuild a doc
-  List<DocumentBlock> _getBlocksFromDocument(DreamkeeperDocument document, {int overlap=0, int minsize=32, int maxsize=384}) {
-    // TODO: alter this so that it generates blocks that are less than the max token count for the embedding model 512*(3/4)= 384 words long
-    // TODO: add minimum length and standard overlap arguments, this ensures that where we have a sequence that is slightly over the limit, we don't get stubs
+  List<DocumentBlock> _getBlocksFromDocument(DreamkeeperDocument document) {
+    const maxsize = 128;
+    const minsplit = 32;
 
-    List<dynamic> components = jsonDecode(document.content);
 
-    List<DocumentBlock> blocks = [];
-    int blockNumber = 0;
-    for (var component in components) {
-      if (component is Map<String, dynamic>) {
-        String? plaintext =
-            component.containsKey('insert') ? component['insert'] : null;
-        if (plaintext != null && plaintext.length > 1) { // to avoid the formatting inserts that quill uses 
-          blocks.add(DocumentBlock(blockNumber, plaintext));
-        } // no point adding empty blocks to the db, that would just waste space
+    List<Map<String, dynamic>> components =
+        List<Map<String, dynamic>>.from(jsonDecode(document.content));
+
+
+    /* step one, split larger blocks into smaller chunks */
+
+    // dynamically get the wordcounts
+    List<int> wordcounts() => components
+        .map((e) => e['insert'] as String)
+        .map((e) => e.split(" ").length)
+        .toList();
+
+    List<int> counts = wordcounts();
+ 
+    // break components into chunks until they get small enough
+    while (counts.fold(0, max) > maxsize) {
+      int indexToChunk = counts.indexWhere((len) => len > maxsize);
+
+      String fullText = components[indexToChunk]['insert'];
+      List<String> words = fullText.split(" ");
+
+      // Join words back together for left and right chunks
+
+      // if the right chunk would end up being a stub, we split in the middle instead
+      int splicePoint = counts[indexToChunk] < maxsize + minsplit
+          ? counts[indexToChunk] ~/ 2
+          : maxsize;
+
+      String leftText = words.take(splicePoint).join(" ");
+      String rightText = words.skip(splicePoint).join(" ");
+      
+      // Create new component objects (not references to the original)
+      Map<String, dynamic> left = Map<String, dynamic>.from(components[indexToChunk]);
+      Map<String, dynamic> right = Map<String, dynamic>.from(components[indexToChunk]);
+      left['insert'] = leftText;
+      right['insert'] = rightText;
+
+      // perform the chunking
+      components.removeAt(indexToChunk);
+      components.insertAll(indexToChunk, [left, right]);
+      // components.replaceRange(indexToChunk, indexToChunk, [left, right]);
+      counts = wordcounts();
+      debugPrint("$counts");
+    }
+
+    /* Step 2: define subdocument split points */
+    // to make this considerably cheaper, we can use the counts list to handle this
+    List<List<int>> subdocumentIndices = [];
+    int slowpointer = 0;
+    int fastpointer = 0;
+    int words = 0;
+    while (slowpointer < counts.length) {
+      words += counts[fastpointer];
+      fastpointer += 1;
+
+      if (words > maxsize || fastpointer == counts.length) {
+        subdocumentIndices.add([slowpointer, fastpointer]);
+        slowpointer = fastpointer;
+        words = 0;
       }
     }
-    return blocks;
+
+    /* Step 3: generate a list of block objects based on the indices given */
+
+    List<String> blockstrings = subdocumentIndices
+        .map((e) => jsonEncode(components.sublist(e[0], e[1])))
+        .toList();
+
+    return blockstrings.map((e) => DocumentBlock(e)).toList();
   }
 }
