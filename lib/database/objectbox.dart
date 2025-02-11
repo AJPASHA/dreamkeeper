@@ -206,6 +206,8 @@ class ObjectBox {
 
   /// Delete a document based on its id
   void deleteDocument(int id) {
+    if (id==0) { return; } // 0 means that this doc hasn't been saved before, so we can't delete it
+
     store.runInTransaction(TxMode.write, () {
       blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
       blockVectorBox
