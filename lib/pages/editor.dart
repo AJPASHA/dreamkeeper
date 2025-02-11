@@ -1,6 +1,6 @@
 import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/utils/editor_utils.dart';
-import 'package:dreamkeeper/style/text_styles.dart';
+// import 'package:dreamkeeper/style/text_styles.dart';
 import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -23,23 +23,120 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  static const toolbarConfig = QuillSimpleToolbarConfigurations(
+  static const double saveFrequency = 5000; // minimum number of ms before autosave
+  static const _toolbarConfig = QuillSimpleToolbarConfigurations(
     multiRowsDisplay: false,
     showFontFamily: false,
     showFontSize: false,
     showSearchButton: false // this one might get undone later on...
 
   );
-
+  late final TextEditingController titleController;
   late final QuillController? _quillController;
   DateTime lastSaved = DateTime
       .now(); // we use this to reduce the frequency of autosaves to an acceptable level
-  final double saveFrequency = 5000; // minimum number of ms before autosave
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            setState(() {});
+            Navigator.pop(context, true);
+          },
+        ),
+        title: TextField(
+          controller: titleController,
+          decoration: InputDecoration(
+            hintText: widget.dbDocument.blocks[0].plaintext,
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            hintTextDirection: TextDirection.ltr,
+            fillColor: Colors.transparent,
+          ),
+        )
+      ),
+      body: Column(
+        children: [
+          // Static editor toolbar for desktop applications 
+          Visibility(
+            visible: !contextIsMobile(context),
+            child: QuillSimpleToolbar(controller: _quillController, configurations: _toolbarConfig)
+          ),
+          
+          // a list of all the feeds that this is a part of 
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              runSpacing: 8,
+              spacing: 8,
+              children: widget.dbDocument.entries.map((entry) {
+                return ActionChip(
+                  label: Text(entry.feed.target?.title ?? ""),
+                  onPressed: () => Navigator.of(context).pushNamed('/'), // TODO: Make this an actual route with args
+                  // TODO: add an extension to allow long presses
+                );
+              }).toList() + [const ActionChip(
+                avatar: Icon(Icons.add),
+                label: Text("add to feed..."),
+              )],
+            ),
+          ),
+          // The editor itself
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 10, 20, 0),
+              child: QuillEditor.basic(
+                controller: _quillController,
+                configurations: const QuillEditorConfigurations(),
+              ),
+            ),
+          ),
+          // This defines the floating keyboard bar found on iOS
+          KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+            return Visibility(
+                visible: isKeyboardVisible,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SafeArea(
+                          top: false,
+                          child: QuillSimpleToolbar(
+                            controller: _quillController,
+                            configurations: _toolbarConfig,
+                        )
+                      ),
+                    ),
+                    IconButton(onPressed: () => FocusScope.of(context).unfocus(), icon: Icon(Icons.keyboard_arrow_down))
+                  ],
+                )
+                );
+          })
+        ],
+      ),
+    );
+  }
+  void handleEdit(DocChange event) {
+    final DateTime now = DateTime.now();
+
+    if (now.difference(lastSaved).inMilliseconds > saveFrequency) {
+      save();
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
     final document = getDocumentFromString(widget.dbDocument.content);
+    titleController = TextEditingController(text: widget.dbDocument.title);
     _quillController = QuillController(
         document: document,
         selection: TextSelection(
@@ -54,7 +151,7 @@ class _EditorState extends State<Editor> {
   @override
   void dispose() {
     // TODO: Change this to work on the basis of quill controller plaintext
-    if ((_quillController?.document.length ?? 0) == 1) {
+    if (!nonWhitespacePattern.hasMatch(_quillController?.document.toPlainText() ?? " "))  {
       debugPrint("Deleting doc because empty");
       objectbox.deleteDocument(widget.dbDocument.id);
     } else {
@@ -66,15 +163,6 @@ class _EditorState extends State<Editor> {
     }
     super.dispose();
   }
-
-  void handleEdit(DocChange event) {
-    final DateTime now = DateTime.now();
-
-    if (now.difference(lastSaved).inMilliseconds > saveFrequency) {
-      save();
-    }
-  }
-
   void save() {
     if (_quillController == null) {
       debugPrint("Cannot save, editor controller is not initialised yet");
@@ -82,9 +170,7 @@ class _EditorState extends State<Editor> {
     }
     final document = _quillController.document;
 
-    debugPrint(document.toPlainText());
-    final nonWhitespace = RegExp(r"\S");
-    if (!nonWhitespace.hasMatch(document.toPlainText())) { // don't save a document if there are only whitespace chars in it
+    if (!nonWhitespacePattern.hasMatch(document.toPlainText())) { // don't save a document if there are only whitespace chars in it
       return;
     }
 
@@ -94,68 +180,5 @@ class _EditorState extends State<Editor> {
     //TODO: make it so that this also updates feed membership
     objectbox.saveDocument(saveDoc);
     lastSaved = DateTime.now();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            setState(() {});
-            Navigator.pop(context, true);
-          },
-        ),
-        title: Text(
-          "Editor",
-          style: h2,
-        ),
-      ),
-      body: Column(
-        children: [
-          Visibility(
-            visible: !contextIsMobile(context),
-            child: QuillSimpleToolbar(controller: _quillController, configurations: toolbarConfig)
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 20, 0),
-              child: QuillEditor.basic(
-                controller: _quillController,
-                configurations: const QuillEditorConfigurations(),
-              ),
-            ),
-          ),
-          KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
-            return Visibility(
-                visible: isKeyboardVisible,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SafeArea(
-                          top: false,
-                          child: QuillSimpleToolbar(
-                            controller: _quillController,
-                            configurations: toolbarConfig,
-                        )
-                      ),
-                    ),
-                    IconButton(onPressed: () => FocusScope.of(context).unfocus(), icon: Icon(Icons.keyboard_arrow_down))
-                  ],
-                )
-                );
-          })
-        ],
-      ),
-      // bottomSheet: QuillSimpleToolbar(
-      //       controller: _quillController,
-      //       configurations:
-      //           const QuillSimpleToolbarConfigurations(
-      //             multiRowsDisplay: false
-      //           ), // edit this line to get rid of clutter, we are going to want to create some 'toolbar nav system here'
-      //     ),
-    );
   }
 }
