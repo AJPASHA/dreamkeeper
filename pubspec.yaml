@@ -38,6 +38,7 @@ dependencies:
   objectbox: any
   objectbox_flutter_libs: any
   http: ^1.3.0
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
   flutter_test:

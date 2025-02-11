@@ -2,10 +2,10 @@ PODS:
   - Flutter (1.0.0)
   - flutter_keyboard_visibility_temp_fork (0.0.1):
     - Flutter
-  - ObjectBox (4.0.1)
+  - ObjectBox (4.1.0)
   - objectbox_flutter_libs (0.0.1):
     - Flutter
-    - ObjectBox (= 4.0.1)
+    - ObjectBox (= 4.1.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -43,12 +43,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_keyboard_visibility_temp_fork: 8a8809c4129e31d25fca77446e0f3fd548122ced
-  ObjectBox: 0bc4bb75eea85f6af06b369148b334c2056bbc29
-  objectbox_flutter_libs: 2ce0da386c780878687c736b528ceaf371573efb
+  ObjectBox: bf3d4b51075d52868422d5d1f2f2141b1d630d30
+  objectbox_flutter_libs: 2f30755c12b0fe104d75445c3ba879e3072eda54
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   quill_native_bridge_ios: 2b01d585fcc73d0f5eed78c0bd244ee564b06f5a
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
 COCOAPODS: 1.16.2

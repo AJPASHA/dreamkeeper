@@ -210,10 +210,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "7856d364b589d1f08986e140938578ed36ed948581fbc3bc9aef1805039ac5ab"
+      sha256: "7306ab8a2359a48d22310ad823521d723acfed60ee1f7e37388e8986853b6820"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.7"
+    version: "2.3.8"
   diff_match_patch:
     dependency: transitive
     description:
@@ -307,6 +307,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flutter_keyboard_visibility:
+    dependency: "direct main"
+    description:
+      name: flutter_keyboard_visibility
+      sha256: "98664be7be0e3ffca00de50f7f6a287ab62c763fc8c762e0a21584584a3ff4f8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   flutter_keyboard_visibility_linux:
     dependency: transitive
     description:
@@ -339,6 +347,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4"
+  flutter_keyboard_visibility_web:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_web
+      sha256: d3771a2e752880c79203f8d80658401d0c998e4183edca05a149f5098ce6e3d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_keyboard_visibility_windows:
     dependency: transitive
     description:
@@ -462,10 +478,10 @@ packages:
     dependency: transitive
     description:
       name: js
-      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      sha256: c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.7"
+    version: "0.7.1"
   json_annotation:
     dependency: transitive
     description:
@@ -566,26 +582,26 @@ packages:
     dependency: "direct main"
     description:
       name: objectbox
-      sha256: ea823f4bf1d0a636e7aa50b43daabb64dd0fbd80b85a033016ccc1bc4f76f432
+      sha256: "3d1cb5f9aa564f95c76ba251299f6cb1591c3dd8ff05fd76fa0549d899d9fe31"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "4.1.0"
   objectbox_flutter_libs:
     dependency: "direct main"
     description:
       name: objectbox_flutter_libs
-      sha256: c91350bbbce5e6c2038255760b5be988faead004c814f833c2cd137445c6ae70
+      sha256: "4f54ebbd7a3b72f1a5ef4fea76cb01cc36440a4cac1f63bfb6719afba400eedb"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "4.1.0"
   objectbox_generator:
     dependency: "direct dev"
     description:
       name: objectbox_generator
-      sha256: "96da521f2cef455cd524f8854e31d64495c50711ad5f1e2cf3142a8e527bc75f"
+      sha256: "777924e14daf18603a023b346333acac1c4fce9fe4a715b85d98cfcc723d9a1a"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "4.1.0"
   package_config:
     dependency: transitive
     description:
@@ -987,10 +1003,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "154360849a56b7b67331c21f09a386562d88903f90a1099c5987afc1912e1f29"
+      sha256: daf97c9d80197ed7b619040e86c8ab9a9dad285e7671ee7390f9180cc828a51e
       url: "https://pub.dev"
     source: hosted
-    version: "5.10.0"
+    version: "5.10.1"
   xdg_directories:
     dependency: transitive
     description:
