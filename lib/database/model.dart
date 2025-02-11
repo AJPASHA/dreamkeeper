@@ -79,11 +79,12 @@ class DreamkeeperDocument {
   @Id()
   int id;
   String content;
+  String? title; // by default titles don't have to have names
 
   DateTime createdOn;
   DateTime editedOn;
 
-  DreamkeeperDocument( this.content, {this.id=0, DateTime? createdOn, DateTime? editedOn}) 
+  DreamkeeperDocument( this.content, {this.id=0, this.title, DateTime? createdOn, DateTime? editedOn, }) 
     : createdOn = createdOn ?? DateTime.now(),
       editedOn = editedOn ?? DateTime.now();
 
@@ -93,9 +94,6 @@ class DreamkeeperDocument {
     return List<Map<String, dynamic>>.from(jsonDecode(content));
   }
 
-  String get title {
-    return contentMap.first['insert'];
-  }
 
   @Backlink('document')
   final entries = ToMany<FeedEntry>();

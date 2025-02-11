@@ -184,9 +184,12 @@ class ObjectBox {
 
   /// Save a document
   void saveDocument(DreamkeeperDocument document) async {
+    // debugPrint("Title of document: ${document.title}");
+
     //Since objectbox does not seem to handle cascading deletes, we handle deletes to the blocks within a trx
     store.runInTransaction(TxMode.write, () {
-      // blockBox.removeMany(ids)
+
+      // TODO: make this a lot more efficient (cost-wise) by only replacing those blocks which have actually changed content
       blockBox
           .query(DocumentBlock_.document.equals(document.id))
           .build()
@@ -195,9 +198,9 @@ class ObjectBox {
       document.blocks.addAll(blocks);
 
       documentBox.put(document);
-
       refreshVectorIndex();
     });
+
 
     debugPrint("Document Saved!");
   }
@@ -240,6 +243,8 @@ class ObjectBox {
 
     List<int> counts = wordcounts();
  
+
+    // TODO: make this smarter by first looking for a whitespace character to split on before going for generic split
     // break components into chunks until they get small enough
     while (counts.fold(0, max) > maxsize) {
       int indexToChunk = counts.indexWhere((len) => len > maxsize);
