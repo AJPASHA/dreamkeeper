@@ -97,7 +97,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 6764158569011806594),
       name: 'DreamkeeperDocument',
-      lastPropertyId: const obx_int.IdUid(4, 5044171483683226317),
+      lastPropertyId: const obx_int.IdUid(5, 3801252166603286614),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -119,6 +119,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(4, 5044171483683226317),
             name: 'editedOn',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 3801252166603286614),
+            name: 'title',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -343,11 +348,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (DreamkeeperDocument object, fb.Builder fbb) {
           final contentOffset = fbb.writeString(object.content);
-          fbb.startTable(5);
+          final titleOffset =
+              object.title == null ? null : fbb.writeString(object.title!);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, contentOffset);
           fbb.addInt64(2, object.createdOn.millisecondsSinceEpoch);
           fbb.addInt64(3, object.editedOn.millisecondsSinceEpoch);
+          fbb.addOffset(4, titleOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -358,12 +366,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final titleParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 12);
           final createdOnParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
           final editedOnParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
           final object = DreamkeeperDocument(contentParam,
-              id: idParam, createdOn: createdOnParam, editedOn: editedOnParam);
+              id: idParam,
+              title: titleParam,
+              createdOn: createdOnParam,
+              editedOn: editedOnParam);
           obx_int.InternalToManyAccess.setRelInfo<DreamkeeperDocument>(
               object.entries,
               store,
@@ -541,6 +554,10 @@ class DreamkeeperDocument_ {
   /// See [DreamkeeperDocument.editedOn].
   static final editedOn =
       obx.QueryDateProperty<DreamkeeperDocument>(_entities[2].properties[3]);
+
+  /// See [DreamkeeperDocument.title].
+  static final title =
+      obx.QueryStringProperty<DreamkeeperDocument>(_entities[2].properties[4]);
 
   /// see [DreamkeeperDocument.entries]
   static final entries =

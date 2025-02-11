@@ -51,8 +51,9 @@ class _EditorState extends State<Editor> {
         ),
         title: TextField(
           controller: titleController,
+          onEditingComplete: () => save(),
           decoration: InputDecoration(
-            hintText: widget.dbDocument.blocks[0].plaintext,
+            hintText: widget.dbDocument.blocks.isEmpty ? "" : widget.dbDocument.blocks[0].plaintext,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -161,6 +162,7 @@ class _EditorState extends State<Editor> {
     if (_quillController != null) {
       _quillController.dispose();
     }
+    titleController.dispose();
     super.dispose();
   }
   void save() {
@@ -173,12 +175,11 @@ class _EditorState extends State<Editor> {
     if (!nonWhitespacePattern.hasMatch(document.toPlainText())) { // don't save a document if there are only whitespace chars in it
       return;
     }
-
-    DreamkeeperDocument saveDoc = widget.dbDocument;
-    saveDoc.content = getStringFromDocument(document);
+    widget.dbDocument.content = getStringFromDocument(document);
+    widget.dbDocument.title = titleController.text == "" ? null : titleController.text;
 
     //TODO: make it so that this also updates feed membership
-    objectbox.saveDocument(saveDoc);
+    objectbox.saveDocument(widget.dbDocument);
     lastSaved = DateTime.now();
   }
 }

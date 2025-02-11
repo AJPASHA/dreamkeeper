@@ -15,14 +15,17 @@ class DocumentCard extends StatefulWidget {
 
 class _DocumentCardState extends State<DocumentCard> {
   // late FeedEntry entry;
-  late DreamkeeperDocument? document;
-  late String? title;
-
+  late final DreamkeeperDocument? document;
+  late final String? title;
+  late final bool isTitled;
   @override
   void initState() {
     super.initState();
     document = widget.entry.document.target;
-    title = document?.title;
+    title = document?.title ?? document?.blocks.firstOrNull?.plaintext ?? "Unnamed document";
+    isTitled = document?.title != null;
+    
+    
   }
 
   @override
@@ -50,7 +53,7 @@ class _DocumentCardState extends State<DocumentCard> {
                   child: Text(
                       title ??
                           "Unnamed Document",
-                      style: h2),
+                      style: isTitled ? h2 : h2.copyWith(color: Colors.grey, fontStyle: FontStyle.italic)),
                 ),
                 PopupMenuButton<PopupMenuElement>(
                   onSelected: (item) => onPopupSelected(context, item.text),
