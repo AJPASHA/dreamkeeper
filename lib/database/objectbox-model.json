@@ -4,45 +4,8 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:869866442667580768",
-      "lastPropertyId": "4:7768266513124934083",
-      "name": "BlockVector",
-      "properties": [
-        {
-          "id": "1:6603946342748197489",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:6144097006031577889",
-          "name": "vector",
-          "type": 28,
-          "flags": 8,
-          "indexId": "1:46236144355578097"
-        },
-        {
-          "id": "3:1320742463321956039",
-          "name": "documentId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "2:2221986349610925164",
-          "relationTarget": "DreamkeeperDocument"
-        },
-        {
-          "id": "4:7768266513124934083",
-          "name": "blockId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "3:5893272859240009648",
-          "relationTarget": "DocumentBlock"
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "2:8498441547869950965",
-      "lastPropertyId": "6:4016104214674083446",
+      "lastPropertyId": "7:932829881909351894",
       "name": "DocumentBlock",
       "properties": [
         {
@@ -60,17 +23,16 @@
           "relationTarget": "DreamkeeperDocument"
         },
         {
-          "id": "5:8186406677713977854",
-          "name": "embeddingId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "5:6115012636440699710",
-          "relationTarget": "BlockVector"
-        },
-        {
           "id": "6:4016104214674083446",
           "name": "content",
           "type": 9
+        },
+        {
+          "id": "7:932829881909351894",
+          "name": "vector",
+          "type": 28,
+          "flags": 8,
+          "indexId": "9:2709633154347540740"
         }
       ],
       "relations": [
@@ -188,16 +150,25 @@
     }
   ],
   "lastEntityId": "5:4268591203767669145",
-  "lastIndexId": "8:1990685488086378510",
+  "lastIndexId": "9:2709633154347540740",
   "lastRelationId": "1:5080214140499351460",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredEntityUids": [
+    869866442667580768
+  ],
+  "retiredIndexUids": [
+    6115012636440699710
+  ],
   "retiredPropertyUids": [
     7038815928080113058,
-    5245210910484295520
+    5245210910484295520,
+    8186406677713977854,
+    6603946342748197489,
+    6144097006031577889,
+    1320742463321956039,
+    7768266513124934083
   ],
   "retiredRelationUids": [],
   "version": 1
