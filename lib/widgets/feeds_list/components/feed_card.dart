@@ -3,7 +3,7 @@ import 'package:dreamkeeper/main.dart';
 import 'package:dreamkeeper/router.dart';
 import 'package:dreamkeeper/style/text_styles.dart';
 import 'package:flutter/material.dart';
-import '../shared/popup_menu_element.dart';
+import '../../_shared/popup_menu_element.dart';
 
 
 class FeedCard extends StatefulWidget {

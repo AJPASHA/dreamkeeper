@@ -1,9 +1,9 @@
 import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/style/text_styles.dart';
 import 'package:flutter/material.dart';
-import '../../router.dart';
-import '../../main.dart';
-import '../shared/popup_menu_element.dart';
+import '../../../router.dart';
+import '../../../main.dart';
+import '../../_shared/popup_menu_element.dart';
 
 class DocumentCard extends StatefulWidget {
   final FeedEntry entry;

@@ -1,4 +1,4 @@
-import 'package:dreamkeeper/widgets/feeds_list/feed_card.dart';
+import './components/feed_card.dart';
 import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 import '../../database/model.dart';
