@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // Import Page widgets for the nav bar
 import 'package:dreamkeeper/views/feeds_list/feeds_list.dart';
 import 'package:dreamkeeper/views/search/search.dart';
-import 'package:dreamkeeper/views/tab_switcher/tabs.dart';
 
 /// index.dart
 ///
@@ -78,10 +77,10 @@ class _IndexState extends State<Index> {
 
   IconButton tabsButton() {
     return IconButton(
-      icon: const Icon(Icons.check_box_outline_blank),
+      icon: const Icon(Icons.add),
       iconSize: iconSize,
-      color: (_currentView is Tabs) ? Colors.blue : Colors.grey,
-      onPressed: () => setState(() => _currentView = const Tabs()),
+      color: Colors.grey,
+      onPressed: () => Navigator.of(context).pushNamed('/editor'),
     );
   }
 }
