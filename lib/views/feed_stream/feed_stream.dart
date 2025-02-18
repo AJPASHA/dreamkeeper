@@ -1,7 +1,7 @@
-import './components/document_card.dart';
+import 'components/document_card.dart';
 import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/main.dart';
-import 'package:dreamkeeper/style/text_styles.dart';
+import 'package:dreamkeeper/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:dreamkeeper/router.dart';
 

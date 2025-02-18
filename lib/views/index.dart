@@ -1,10 +1,10 @@
-import 'package:dreamkeeper/style/text_styles.dart';
+import 'package:dreamkeeper/styles/text_styles.dart';
 import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 // Import Page widgets for the nav bar
-import 'package:dreamkeeper/widgets/feeds_list/feeds_list.dart';
-import 'package:dreamkeeper/widgets/search/search.dart';
-import 'package:dreamkeeper/widgets/tab_switcher/tabs.dart';
+import 'package:dreamkeeper/views/feeds_list/feeds_list.dart';
+import 'package:dreamkeeper/views/search/search.dart';
+import 'package:dreamkeeper/views/tab_switcher/tabs.dart';
 
 /// index.dart
 ///
