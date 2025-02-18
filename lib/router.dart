@@ -1,6 +1,6 @@
 import 'package:dreamkeeper/views/search/search_results.dart';
 import 'package:dreamkeeper/database/model.dart';
-import 'package:dreamkeeper/views/editor.dart';
+import 'package:dreamkeeper/views/editor/editor.dart';
 import 'views/feed_stream/feed_stream.dart';
 import 'package:flutter/material.dart';
 import 'views/error.dart';
