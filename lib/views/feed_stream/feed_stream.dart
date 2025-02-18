@@ -41,7 +41,7 @@ class _FeedStreamState extends State<FeedStream> {
           )),
       body: StreamBuilder(
 
-          stream: objectbox.getEntries(feed.id),
+          stream: objectbox.getEntriesOfFeed(feed.id),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
               return ListView.builder(
