@@ -110,6 +110,7 @@ class DocumentBlock {
   /// Properties:
   /// - [id]: Unique identifier for the document block.
   /// - [content]: The content of the subdocument.
+  /// - [vector]: The Vector index of the document
   /// 
   /// Getters:
   /// - [richtext]: get a map of the quill document for 
@@ -120,38 +121,39 @@ class DocumentBlock {
   @Id()
   int id;
   String content;
+  @HnswIndex(dimensions: 1024) @Property(type: PropertyType.floatVector)
+  List<double>? vector;
 
   String get plaintext {
     return jsonDecode(content).map((e) => e['insert']).join("");
   }
 
-  DocumentBlock(this.content, {this.id=0});
+  DocumentBlock(this.content, {this.vector,this.id=0});
 
   final document = ToOne<DreamkeeperDocument>();
-  final embedding = ToOne<BlockVector>();
+
+
 
   final entries = ToMany<FeedEntry>();
 }
 
-// TODO: change the length of the embedding field based on size of model being used
-@Entity()
-class BlockVector {
-  /// Represents the embedding of a document block.
-  /// 
-  /// Properties:
-  /// - [id]: Unique identifier for the block vector.
-  /// - [vector]: A list of floating-point numbers representing the embedding.
-  /// 
-  /// Relationships:
-  /// - [document]: A reference to the Document that this block vector is associated with.
-  /// - [block]: A reference to the DocumentBlock that this block vector is associated with.
-  @Id() int id;
+// // TODO: change the length of the embedding field based on size of model being used
+// @Entity()
+// class BlockVector {
+//   /// Represents the embedding of a document block.
+//   /// 
+//   /// Properties:
+//   /// - [id]: Unique identifier for the block vector.
+//   /// - [vector]: A list of floating-point numbers representing the embedding.
+//   /// 
+//   /// Relationships:
+//   /// - [document]: A reference to the Document that this block vector is associated with.
+//   /// - [block]: A reference to the DocumentBlock that this block vector is associated with.
+//   @Id() int id;
 
-  @HnswIndex(dimensions: 1024) @Property(type: PropertyType.floatVector)
-  List<double> vector;
 
-  BlockVector(this.vector, {this.id=0});
+//   BlockVector(this.vector, {this.id=0});
 
-  final document = ToOne<DreamkeeperDocument>();
-  final block = ToOne<DocumentBlock>();
-}
+//   final document = ToOne<DreamkeeperDocument>();
+//   final block = ToOne<DocumentBlock>();
+// }

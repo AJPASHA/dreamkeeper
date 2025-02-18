@@ -20,46 +20,9 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 869866442667580768),
-      name: 'BlockVector',
-      lastPropertyId: const obx_int.IdUid(4, 7768266513124934083),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6603946342748197489),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 6144097006031577889),
-            name: 'vector',
-            type: 28,
-            flags: 8,
-            indexId: const obx_int.IdUid(1, 46236144355578097),
-            hnswParams: obx_int.ModelHnswParams(
-              dimensions: 1024,
-            )),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1320742463321956039),
-            name: 'documentId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(2, 2221986349610925164),
-            relationTarget: 'DreamkeeperDocument'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 7768266513124934083),
-            name: 'blockId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(3, 5893272859240009648),
-            relationTarget: 'DocumentBlock')
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 8498441547869950965),
       name: 'DocumentBlock',
-      lastPropertyId: const obx_int.IdUid(6, 4016104214674083446),
+      lastPropertyId: const obx_int.IdUid(7, 932829881909351894),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -75,17 +38,19 @@ final _entities = <obx_int.ModelEntity>[
             indexId: const obx_int.IdUid(4, 3900456191496689384),
             relationTarget: 'DreamkeeperDocument'),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 8186406677713977854),
-            name: 'embeddingId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(5, 6115012636440699710),
-            relationTarget: 'BlockVector'),
-        obx_int.ModelProperty(
             id: const obx_int.IdUid(6, 4016104214674083446),
             name: 'content',
             type: 9,
-            flags: 0)
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 932829881909351894),
+            name: 'vector',
+            type: 28,
+            flags: 8,
+            indexId: const obx_int.IdUid(9, 2709633154347540740),
+            hnswParams: obx_int.ModelHnswParams(
+              dimensions: 1024,
+            ))
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
@@ -245,57 +210,29 @@ obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
       lastEntityId: const obx_int.IdUid(5, 4268591203767669145),
-      lastIndexId: const obx_int.IdUid(8, 1990685488086378510),
+      lastIndexId: const obx_int.IdUid(9, 2709633154347540740),
       lastRelationId: const obx_int.IdUid(1, 5080214140499351460),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [7038815928080113058, 5245210910484295520],
+      retiredEntityUids: const [869866442667580768],
+      retiredIndexUids: const [6115012636440699710],
+      retiredPropertyUids: const [
+        7038815928080113058,
+        5245210910484295520,
+        8186406677713977854,
+        6603946342748197489,
+        6144097006031577889,
+        1320742463321956039,
+        7768266513124934083
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    BlockVector: obx_int.EntityDefinition<BlockVector>(
-        model: _entities[0],
-        toOneRelations: (BlockVector object) => [object.document, object.block],
-        toManyRelations: (BlockVector object) => {},
-        getId: (BlockVector object) => object.id,
-        setId: (BlockVector object, int id) {
-          object.id = id;
-        },
-        objectToFB: (BlockVector object, fb.Builder fbb) {
-          final vectorOffset = fbb.writeListFloat32(object.vector);
-          fbb.startTable(5);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, vectorOffset);
-          fbb.addInt64(2, object.document.targetId);
-          fbb.addInt64(3, object.block.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final vectorParam =
-              const fb.ListReader<double>(fb.Float32Reader(), lazy: false)
-                  .vTableGet(buffer, rootOffset, 6, []);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object = BlockVector(vectorParam, id: idParam);
-          object.document.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.document.attach(store);
-          object.block.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          object.block.attach(store);
-          return object;
-        }),
     DocumentBlock: obx_int.EntityDefinition<DocumentBlock>(
-        model: _entities[1],
-        toOneRelations: (DocumentBlock object) =>
-            [object.document, object.embedding],
+        model: _entities[0],
+        toOneRelations: (DocumentBlock object) => [object.document],
         toManyRelations: (DocumentBlock object) => {
               obx_int.RelInfo<DocumentBlock>.toMany(1, object.id):
                   object.entries
@@ -306,11 +243,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (DocumentBlock object, fb.Builder fbb) {
           final contentOffset = fbb.writeString(object.content);
-          fbb.startTable(7);
+          final vectorOffset = object.vector == null
+              ? null
+              : fbb.writeListFloat32(object.vector!);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addInt64(3, object.document.targetId);
-          fbb.addInt64(4, object.embedding.targetId);
           fbb.addOffset(5, contentOffset);
+          fbb.addOffset(6, vectorOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -319,21 +259,22 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final contentParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 14, '');
+          final vectorParam =
+              const fb.ListReader<double>(fb.Float32Reader(), lazy: false)
+                  .vTableGetNullable(buffer, rootOffset, 16);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final object = DocumentBlock(contentParam, id: idParam);
+          final object =
+              DocumentBlock(contentParam, vector: vectorParam, id: idParam);
           object.document.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.document.attach(store);
-          object.embedding.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          object.embedding.attach(store);
           obx_int.InternalToManyAccess.setRelInfo<DocumentBlock>(object.entries,
               store, obx_int.RelInfo<DocumentBlock>.toMany(1, object.id));
           return object;
         }),
     DreamkeeperDocument: obx_int.EntityDefinition<DreamkeeperDocument>(
-        model: _entities[2],
+        model: _entities[1],
         toOneRelations: (DreamkeeperDocument object) => [],
         toManyRelations: (DreamkeeperDocument object) => {
               obx_int.RelInfo<FeedEntry>.toOneBacklink(5, object.id,
@@ -390,7 +331,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           return object;
         }),
     Feed: obx_int.EntityDefinition<Feed>(
-        model: _entities[3],
+        model: _entities[2],
         toOneRelations: (Feed object) => [],
         toManyRelations: (Feed object) => {
               obx_int.RelInfo<FeedEntry>.toOneBacklink(
@@ -437,7 +378,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           return object;
         }),
     FeedEntry: obx_int.EntityDefinition<FeedEntry>(
-        model: _entities[4],
+        model: _entities[3],
         toOneRelations: (FeedEntry object) => [object.feed, object.document],
         toManyRelations: (FeedEntry object) => {
               obx_int.RelInfo<DocumentBlock>.toManyBacklink(1, object.id):
@@ -493,71 +434,51 @@ obx_int.ModelDefinition getObjectBoxModel() {
   return obx_int.ModelDefinition(model, bindings);
 }
 
-/// [BlockVector] entity fields to define ObjectBox queries.
-class BlockVector_ {
-  /// See [BlockVector.id].
-  static final id =
-      obx.QueryIntegerProperty<BlockVector>(_entities[0].properties[0]);
-
-  /// See [BlockVector.vector].
-  static final vector =
-      obx.QueryHnswProperty<BlockVector>(_entities[0].properties[1]);
-
-  /// See [BlockVector.document].
-  static final document =
-      obx.QueryRelationToOne<BlockVector, DreamkeeperDocument>(
-          _entities[0].properties[2]);
-
-  /// See [BlockVector.block].
-  static final block = obx.QueryRelationToOne<BlockVector, DocumentBlock>(
-      _entities[0].properties[3]);
-}
-
 /// [DocumentBlock] entity fields to define ObjectBox queries.
 class DocumentBlock_ {
   /// See [DocumentBlock.id].
   static final id =
-      obx.QueryIntegerProperty<DocumentBlock>(_entities[1].properties[0]);
+      obx.QueryIntegerProperty<DocumentBlock>(_entities[0].properties[0]);
 
   /// See [DocumentBlock.document].
   static final document =
       obx.QueryRelationToOne<DocumentBlock, DreamkeeperDocument>(
-          _entities[1].properties[1]);
-
-  /// See [DocumentBlock.embedding].
-  static final embedding = obx.QueryRelationToOne<DocumentBlock, BlockVector>(
-      _entities[1].properties[2]);
+          _entities[0].properties[1]);
 
   /// See [DocumentBlock.content].
   static final content =
-      obx.QueryStringProperty<DocumentBlock>(_entities[1].properties[3]);
+      obx.QueryStringProperty<DocumentBlock>(_entities[0].properties[2]);
+
+  /// See [DocumentBlock.vector].
+  static final vector =
+      obx.QueryHnswProperty<DocumentBlock>(_entities[0].properties[3]);
 
   /// see [DocumentBlock.entries]
   static final entries = obx.QueryRelationToMany<DocumentBlock, FeedEntry>(
-      _entities[1].relations[0]);
+      _entities[0].relations[0]);
 }
 
 /// [DreamkeeperDocument] entity fields to define ObjectBox queries.
 class DreamkeeperDocument_ {
   /// See [DreamkeeperDocument.id].
   static final id =
-      obx.QueryIntegerProperty<DreamkeeperDocument>(_entities[2].properties[0]);
+      obx.QueryIntegerProperty<DreamkeeperDocument>(_entities[1].properties[0]);
 
   /// See [DreamkeeperDocument.content].
   static final content =
-      obx.QueryStringProperty<DreamkeeperDocument>(_entities[2].properties[1]);
+      obx.QueryStringProperty<DreamkeeperDocument>(_entities[1].properties[1]);
 
   /// See [DreamkeeperDocument.createdOn].
   static final createdOn =
-      obx.QueryDateProperty<DreamkeeperDocument>(_entities[2].properties[2]);
+      obx.QueryDateProperty<DreamkeeperDocument>(_entities[1].properties[2]);
 
   /// See [DreamkeeperDocument.editedOn].
   static final editedOn =
-      obx.QueryDateProperty<DreamkeeperDocument>(_entities[2].properties[3]);
+      obx.QueryDateProperty<DreamkeeperDocument>(_entities[1].properties[3]);
 
   /// See [DreamkeeperDocument.title].
   static final title =
-      obx.QueryStringProperty<DreamkeeperDocument>(_entities[2].properties[4]);
+      obx.QueryStringProperty<DreamkeeperDocument>(_entities[1].properties[4]);
 
   /// see [DreamkeeperDocument.entries]
   static final entries =
@@ -573,19 +494,19 @@ class DreamkeeperDocument_ {
 /// [Feed] entity fields to define ObjectBox queries.
 class Feed_ {
   /// See [Feed.id].
-  static final id = obx.QueryIntegerProperty<Feed>(_entities[3].properties[0]);
+  static final id = obx.QueryIntegerProperty<Feed>(_entities[2].properties[0]);
 
   /// See [Feed.title].
   static final title =
-      obx.QueryStringProperty<Feed>(_entities[3].properties[1]);
+      obx.QueryStringProperty<Feed>(_entities[2].properties[1]);
 
   /// See [Feed.deletable].
   static final deletable =
-      obx.QueryBooleanProperty<Feed>(_entities[3].properties[2]);
+      obx.QueryBooleanProperty<Feed>(_entities[2].properties[2]);
 
   /// See [Feed.lastViewed].
   static final lastViewed =
-      obx.QueryDateProperty<Feed>(_entities[3].properties[3]);
+      obx.QueryDateProperty<Feed>(_entities[2].properties[3]);
 
   /// see [Feed.entries]
   static final entries =
@@ -596,22 +517,22 @@ class Feed_ {
 class FeedEntry_ {
   /// See [FeedEntry.id].
   static final id =
-      obx.QueryIntegerProperty<FeedEntry>(_entities[4].properties[0]);
+      obx.QueryIntegerProperty<FeedEntry>(_entities[3].properties[0]);
 
   /// See [FeedEntry.dateRecommendedToUser].
   static final dateRecommendedToUser =
-      obx.QueryDateProperty<FeedEntry>(_entities[4].properties[1]);
+      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[1]);
 
   /// See [FeedEntry.dateBlacklistedByUser].
   static final dateBlacklistedByUser =
-      obx.QueryDateProperty<FeedEntry>(_entities[4].properties[2]);
+      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[2]);
 
   /// See [FeedEntry.feed].
   static final feed =
-      obx.QueryRelationToOne<FeedEntry, Feed>(_entities[4].properties[3]);
+      obx.QueryRelationToOne<FeedEntry, Feed>(_entities[3].properties[3]);
 
   /// See [FeedEntry.document].
   static final document =
       obx.QueryRelationToOne<FeedEntry, DreamkeeperDocument>(
-          _entities[4].properties[4]);
+          _entities[3].properties[4]);
 }

@@ -15,7 +15,6 @@ class ObjectBox {
   late final Box<FeedEntry> feedEntryBox;
   late final Box<DreamkeeperDocument> documentBox;
   late final Box<DocumentBlock> blockBox;
-  late final Box<BlockVector> blockVectorBox;
 
   static Future<ObjectBox> create() async {
     final store = await openStore();
@@ -27,7 +26,6 @@ class ObjectBox {
     feedEntryBox = Box<FeedEntry>(store);
     documentBox = Box<DreamkeeperDocument>(store);
     blockBox = Box<DocumentBlock>(store);
-    blockVectorBox = Box<BlockVector>(store);
 
     if (documentBox.isEmpty()) {
       _putDemoData();
@@ -76,25 +74,17 @@ class ObjectBox {
   /// Generate embeddings for a list of document blocks
   Future<List<DocumentBlock>> generateEmbeddings(
       List<DocumentBlock> blocks) async {
-    if (blocks.isEmpty) {
-      return [];
-    } // don't want to call API with empty List
+    if (blocks.isEmpty) { return []; } // don't want to call API with empty List
+
     final List<String> texts = blocks.map((e) => e.plaintext).toList();
     final EmbeddingResponse response = await embeddingService.getEmbeddings(
             texts, EmbeddingPassageType.passage)
         as EmbeddingResponse; // force cast as errors should occur in API service code
     final embeddings = response.embeddings;
     for (final i in List.generate(blocks.length, (i) => i, growable: false)) {
-      final embedding = BlockVector(embeddings[i]);
-      embedding.block.target = blocks[i];
-      blocks[i].embedding.target = embedding;
+      blocks[i].vector = embeddings[i];
     }
-    // for (var e in blocks) {
-    //   debugPrint("${e.embedding.target?.vector}");
-    // }
-
-    blockBox.putManyAsync(
-        blocks); // don't think we need to await this, can happen in it's own time
+    blockBox.putManyAsync(blocks); // don't think we need to await this, can happen in it's own time
     return blocks;
   }
 
@@ -113,26 +103,15 @@ class ObjectBox {
 
     final List<double> queryEmbedding = res!.embeddings[
         0]; // forcing this because errors should be caught in service code TODO: in prod probably want something softer!
-    final vectorsWithScores = blockVectorBox
-        .query(BlockVector_.vector.nearestNeighborsF32(queryEmbedding, 100))
+    final vectorsWithScores = blockBox
+        .query(DocumentBlock_.vector.nearestNeighborsF32(queryEmbedding, 100))
         .build()
         .findWithScores(); // docs say we must find with scores to get right order
-    final List<BlockVector> vectors =
+    final List<DocumentBlock> vectors =
         vectorsWithScores.map((e) => e.object).toList();
-    // final blocks = blockBox.query(DocumentBlock_.embedding.equals()
 
-    List<DocumentBlock> results = [];
-    for (BlockVector result in vectors) {
-      DocumentBlock? block = blockBox
-          .query(DocumentBlock_.embedding.equals(result.id))
-          .build()
-          .findUnique();
 
-      if (block != null) {
-        results.add(block);
-      }
-    }
-    return results;
+    return vectors;
   }
 
   /// Get a document based on its id
@@ -156,29 +135,16 @@ class ObjectBox {
   /// Get a list of all document blocks that don't have a vector
   /// For use in updating search queries
   List<DocumentBlock> getBlocksWithoutVectors() {
-    return blockBox.query(DocumentBlock_.embedding.isNull()).build().find() +
-        blockBox.query(DocumentBlock_.embedding.equals(0)).build().find();
+    return blockBox.query(DocumentBlock_.vector.isNull()).build().find();
   }
 
   /* Update */
 
   /// Searches the vector index for any missing vectors and for any orphaned vectors, deletes the orphans and calls API to generate the missing ones
   void refreshVectorIndex() async {
-    store.runInTransaction(TxMode.write, () {
-      //remove orphans
-      final List<int> orphanedVecIds = blockVectorBox
-              .query(BlockVector_.block.isNull())
-              .build()
-              .findIds() +
-          blockVectorBox.query(BlockVector_.block.equals(0)).build().findIds();
-      // debugPrint("There are ${orphanedVecIds.length} vectors without blocks");
-      blockVectorBox.removeMany(orphanedVecIds);
-      // generate missing vectors
-      final List<DocumentBlock> missingVectors = getBlocksWithoutVectors();
-      // debugPrint("There are ${missingVectors.length} blocks without vectors");
-      generateEmbeddings(missingVectors);
-    });
-
+    List<DocumentBlock> missingVectors = getBlocksWithoutVectors();
+    // debugPrint("There are ${missingVectors.length} blocks without vectors");
+    generateEmbeddings(missingVectors);
     debugPrint("Vector index Refreshed!");
   }
 
@@ -213,10 +179,6 @@ class ObjectBox {
 
     store.runInTransaction(TxMode.write, () {
       blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
-      blockVectorBox
-          .query(BlockVector_.document.equals(id))
-          .build()
-          .remove(); // TODO: Bug here when deleting empty doc
       feedEntryBox.query(FeedEntry_.document.equals(id)).build().remove();
       documentBox.remove(id);
     });
