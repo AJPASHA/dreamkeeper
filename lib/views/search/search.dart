@@ -45,10 +45,10 @@ class _SearchState extends State<Search> {
           },
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed('/editor'),
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => Navigator.of(context).pushNamed('/editor'),
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

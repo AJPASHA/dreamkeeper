@@ -1,5 +1,5 @@
 import 'package:dreamkeeper/database/objectbox.dart';
-import 'package:dreamkeeper/widgets/index.dart';
+import 'package:dreamkeeper/views/index.dart';
 import 'package:dreamkeeper/router.dart';
 import 'package:flutter/material.dart';
 

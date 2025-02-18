@@ -5,7 +5,7 @@ import 'package:dreamkeeper/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import '../main.dart';
+import '../../main.dart';
 
 // TODO: Need to change the checkbox logic in flutter quill so that new line after checked box leads to unchecked box, not a checked box as in current behaviour
 

@@ -1,10 +1,10 @@
-import 'package:dreamkeeper/widgets/search/search_results.dart';
+import 'package:dreamkeeper/views/search/search_results.dart';
 import 'package:dreamkeeper/database/model.dart';
-import 'package:dreamkeeper/widgets/editor.dart';
-import 'widgets/feed_stream/feed_stream.dart';
+import 'package:dreamkeeper/views/editor/editor.dart';
+import 'views/feed_stream/feed_stream.dart';
 import 'package:flutter/material.dart';
-import 'widgets/error.dart';
-import 'package:dreamkeeper/widgets/index.dart';
+import 'views/error.dart';
+import 'package:dreamkeeper/views/index.dart';
 
 /// This is a class which defines the 'sitemap' of the app
 /// This allows us to define dynamic routing for various pages with
