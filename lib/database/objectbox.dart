@@ -76,7 +76,7 @@ class ObjectBox {
           .remove();
       List<DocumentBlock> blocks = _getBlocksFromDocument(document);
       document.blocks.addAll(blocks);
-
+      document.editedOn = DateTime.now();
       documentBox.put(document);
       _refreshVectorIndex();
     });
@@ -240,7 +240,7 @@ class ObjectBox {
   int createFeed(String title) => feedBox.put(Feed(title));
 
   /// add a feed entry based on the ids of the document, feed and whether the system recommeded
-  int addEntry(int documentId, int feedId, bool? systemRecommended) {
+  int addEntry(int documentId, int feedId, {bool? systemRecommended = false}) {
     FeedEntry entry = FeedEntry(
         dateRecommendedToUser:
             (systemRecommended ?? false) ? DateTime.now() : null);
@@ -249,6 +249,18 @@ class ObjectBox {
 
     return feedEntryBox.put(entry);
   }
+
+  void deleteEntryFromDetails(int documentId, int feedId) {
+    var builder = feedEntryBox
+      .query(FeedEntry_.document.equals(documentId)
+        .and(FeedEntry_.feed.equals(feedId)))
+      .build();
+
+    builder.remove();
+
+      
+  }
+
 
   /// get a list of all feeds based on id
   Stream<List<Feed>> getFeeds() {

@@ -2,10 +2,12 @@ import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/utils/editor_utils.dart';
 // import 'package:dreamkeeper/style/text_styles.dart';
 import 'package:dreamkeeper/utils/utils.dart';
+import 'package:dreamkeeper/views/editor/components/feed_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import '../../main.dart';
+import '../../router.dart';
 
 // TODO: Need to change the checkbox logic in flutter quill so that new line after checked box leads to unchecked box, not a checked box as in current behaviour
 
@@ -23,13 +25,13 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
+  late DreamkeeperDocument _document;
   static const double saveFrequency = 5000; // minimum number of ms before autosave
   static const _toolbarConfig = QuillSimpleToolbarConfigurations(
     multiRowsDisplay: false,
     showFontFamily: false,
     showFontSize: false,
-    showSearchButton: false // this one might get undone later on...
-
+    showSearchButton: false 
   );
   late final TextEditingController titleController;
   late final QuillController? _quillController;
@@ -37,8 +39,10 @@ class _EditorState extends State<Editor> {
       .now(); // we use this to reduce the frequency of autosaves to an acceptable level
 
 
+
   @override
   Widget build(BuildContext context) {
+    _document = objectbox.getDocument(widget.dbDocument.id)!;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -53,7 +57,7 @@ class _EditorState extends State<Editor> {
           controller: titleController,
           onEditingComplete: () => save(),
           decoration: InputDecoration(
-            hintText: widget.dbDocument.blocks.isEmpty ? "" : widget.dbDocument.blocks[0].plaintext,
+            hintText: _document.blocks.isEmpty ? "" : _document.blocks[0].plaintext,
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
@@ -78,16 +82,27 @@ class _EditorState extends State<Editor> {
             child: Wrap(
               runSpacing: 8,
               spacing: 8,
-              children: widget.dbDocument.entries.map((entry) {
-                return ActionChip(
+              children: _document.entries.map((entry) { // change this to work based on a db query so that it is stateful
+                return InputChip(
                   label: Text(entry.feed.target?.title ?? ""),
-                  onPressed: () => Navigator.of(context).pushNamed('/'), // TODO: Make this an actual route with args
-                  // TODO: add an extension to allow long presses
+                  onPressed: () {
+                    if (entry.feed.target != null) {
+                      Navigator.of(context).pushNamed('/feed', arguments: FeedArgs(entry.feed.target!));
+                    } else {
+                      debugPrint("Somehow we've got a feed entry without a feed!");
+                    }
+                  },
                 );
-              }).toList() + [const ActionChip(
-                avatar: Icon(Icons.add),
-                label: Text("add to feed..."),
-              )],
+              }).toList() + [InputChip(
+                avatar: const Icon(Icons.add),
+                label: const Text("add to feed..."),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => FeedPicker(_document))
+                  ).then((_) => setState(() {}));
+                  setState(() {});
+                },
+            )],
             ),
           ),
           // The editor itself
@@ -135,9 +150,10 @@ class _EditorState extends State<Editor> {
 
   @override
   void initState() {
+    _document = objectbox.getDocument(widget.dbDocument.id)!;
     super.initState();
-    final document = getDocumentFromString(widget.dbDocument.content);
-    titleController = TextEditingController(text: widget.dbDocument.title);
+    final document = getDocumentFromString(_document.content);
+    titleController = TextEditingController(text: _document.title);
     _quillController = QuillController(
         document: document,
         selection: TextSelection(
@@ -154,7 +170,7 @@ class _EditorState extends State<Editor> {
     // TODO: Change this to work on the basis of quill controller plaintext
     if (!nonWhitespacePattern.hasMatch(_quillController?.document.toPlainText() ?? " "))  {
       debugPrint("Deleting doc because empty");
-      objectbox.deleteDocument(widget.dbDocument.id);
+      objectbox.deleteDocument(_document.id);
     } else {
       save();
     }
@@ -175,11 +191,11 @@ class _EditorState extends State<Editor> {
     if (!nonWhitespacePattern.hasMatch(document.toPlainText())) { // don't save a document if there are only whitespace chars in it
       return;
     }
-    widget.dbDocument.content = getStringFromDocument(document);
-    widget.dbDocument.title = titleController.text == "" ? null : titleController.text;
+    _document.content = getStringFromDocument(document);
+    _document.title = titleController.text == "" ? null : titleController.text;
 
     //TODO: make it so that this also updates feed membership
-    objectbox.saveDocument(widget.dbDocument);
+    objectbox.saveDocument(_document);
     lastSaved = DateTime.now();
   }
 }
