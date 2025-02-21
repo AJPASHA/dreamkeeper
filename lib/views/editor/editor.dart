@@ -167,18 +167,20 @@ class _EditorState extends State<Editor> {
 
   @override
   void dispose() {
-    // TODO: Change this to work on the basis of quill controller plaintext
-    if (!nonWhitespacePattern.hasMatch(_quillController?.document.toPlainText() ?? " "))  {
-      debugPrint("Deleting doc because empty");
-      objectbox.deleteDocument(_document.id);
-    } else {
-      save();
-    }
-
+    final plaintext = _quillController?.document.toPlainText();
     if (_quillController != null) {
       _quillController.dispose();
     }
+
     titleController.dispose();
+
+    if (!nonWhitespacePattern.hasMatch(plaintext ?? " "))  {
+      debugPrint("Deleting doc because empty");
+      objectbox.deleteDocument(_document.id);
+
+    } else {
+      save();
+    }
     super.dispose();
   }
   void save() {
