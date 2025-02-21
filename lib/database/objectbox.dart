@@ -29,9 +29,11 @@ class ObjectBox {
 
     if (documentBox.isEmpty()) {
       _putDemoData();
-    }
-  }
+    } // TODO: comment this out before going into prod
 
+    
+  }
+  //TODO: Create initial data generation function for prod
   void _putDemoData() {
     // Nuclear Option: delete the model file and rerun build_runner
     Feed feed1 = Feed("Demo Feed");
@@ -266,9 +268,10 @@ class ObjectBox {
   }
 
 
-  /// get a list of all feeds based on id
-  Stream<List<Feed>> getFeeds() {
-    final builder = feedBox.query()
+  /// get a list of all (non-system) feeds based on id
+  /// - [systemFeeds]: decide whether you want content feeds, or the user generated feeds (everything, stubs)
+  Stream<List<Feed>> getFeeds({bool systemFeeds=false}) {
+    final builder = feedBox.query(Feed_.deletable.equals(!systemFeeds))
       ..order(Feed_.lastViewed, flags: Order.descending)
       ..order(Feed_.deletable);
     return builder.watch(triggerImmediately: true).map((query) => query.find());
@@ -279,5 +282,68 @@ class ObjectBox {
     final builder = feedEntryBox.query(FeedEntry_.feed.equals(feedId));
     builder.link(FeedEntry_.document);
     return builder.watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+
+  /// Refresh the feed containing everything
+  void refreshEverythingFeed() {
+    Feed? everythingFeed = feedBox
+        .query(Feed_.title.equals(ProtectedFeedName.everything.name))
+        .build()
+        .findUnique();
+    if (everythingFeed == null) {
+      int everythingId = feedBox.put(Feed(ProtectedFeedName.everything.name, deletable: false));
+      everythingFeed = feedBox.get(everythingId);
+    }
+
+    // get the documents that don't have an entry in the document
+    Set<int> documentIds = documentBox.query().build().findIds().toSet();
+
+    // get the documents that are already in the everything feed 
+    Set<int> docsInFeed = feedEntryBox
+        .query(FeedEntry_.feed.equals(everythingFeed!.id))
+        .build()
+        .find()
+        .map((e) => e.document.targetId)
+        .toSet();
+        
+    // get those which need updating
+    Set<int> documentsToAdd = documentIds.difference(docsInFeed);
+    //perform the entry
+    for (int id in documentsToAdd) {
+      addEntry(id, everythingFeed.id);
+    }
+
+    // get those which need deleting (normally this is handled by document deletion, good to be sure though!)
+    Set<int> documentsToDelete = docsInFeed.difference(documentIds);
+    // perform deletion
+    for (int id in documentsToDelete) {
+      deleteEntryFromDetails(id, everythingFeed.id);
+    }
+
+
+    return;
+  }
+}
+
+
+///Defining a list of names that are reserved by the system
+enum ProtectedFeedName{
+  everything,
+  stubs,
+  todos,
+  mentions
+}
+extension Name on ProtectedFeedName {
+  String get name {
+    switch (this) {
+      case ProtectedFeedName.everything: return "Everything";
+      case ProtectedFeedName.stubs: return "Stubs";
+      case ProtectedFeedName.todos: return "To-Dos";
+      case ProtectedFeedName.mentions: return "Mentions";
+    }
+  }
+  static List<String> get protectedNames {
+    return ProtectedFeedName.values.map((e) => e.name).toList();
   }
 }

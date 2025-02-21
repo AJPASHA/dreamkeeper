@@ -48,19 +48,24 @@ class _DocumentCardState extends State<DocumentCard> {
             ]),
         child: Padding(
             padding: EdgeInsets.all(12.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: Text(
-                      title ??
-                          "Unnamed Document",
-                      style: isTitled ? h2 : h2.copyWith(color: Colors.grey, fontStyle: FontStyle.italic)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                          title ??
+                              "Unnamed Document",
+                          style: isTitled ? h2 : h2.copyWith(color: Colors.grey, fontStyle: FontStyle.italic)),
+                    ),
+                    PopupMenuButton<PopupMenuElement>(
+                      onSelected: (item) => onPopupSelected(context, item.text),
+                      itemBuilder: (BuildContext context) =>
+                          [...PopupMenuItems.items.map(buildItem)],
+                    )
+                  ],
                 ),
-                PopupMenuButton<PopupMenuElement>(
-                  onSelected: (item) => onPopupSelected(context, item.text),
-                  itemBuilder: (BuildContext context) =>
-                      [...PopupMenuItems.items.map(buildItem)],
-                )
+                Text("Last Edited: ${document!.editedOn}")
               ],
             )),
       ),

@@ -44,8 +44,8 @@ class _FeedStreamState extends State<FeedStream> {
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
               return ListView.builder(
-                  key: UniqueKey(),
-                  shrinkWrap: true,
+        key: UniqueKey(),
+        shrinkWrap: true,
                   itemCount: snapshot.hasData ? snapshot.data!.length : 0,
                   itemBuilder: _itemBuilder(snapshot.data ?? []));
             } else {

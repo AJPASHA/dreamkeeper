@@ -47,10 +47,13 @@ class _FeedCardState extends State<FeedCard> {
                 child: Text(widget.feed.title, style: h2),
               ),
             ),
-            PopupMenuButton<PopupMenuElement>(
-              onSelected: (item) => onPopupSelected(context, item.text),
-              itemBuilder: (BuildContext context) =>
-                  [...PopupMenuItems.items.map(buildItem)],
+            Visibility(
+              visible: widget.feed.deletable,
+              child: PopupMenuButton<PopupMenuElement>(
+                onSelected: (item) => onPopupSelected(context, item.text),
+                itemBuilder: (BuildContext context) =>
+                    [...PopupMenuItems.items.map(buildItem)],
+              ),
             )
           ],
         ),
@@ -76,7 +79,7 @@ class _FeedCardState extends State<FeedCard> {
                       child: Text("Go Back")),
                   TextButton(
                       onPressed: () {
-                        objectbox.feedBox.remove(widget.feed.id);
+                        objectbox.feedBox.remove(widget.feed.id); // TODO: this should not be exposed to UI
                         debugPrint("Feed ${widget.feed.title} deleted");
                         Navigator.of(context).pop();
                       },
@@ -104,7 +107,7 @@ class _FeedCardState extends State<FeedCard> {
                     onPressed: () {
                       final feedToPut = widget.feed;
                       feedToPut.title = renameTextController.text;
-                      objectbox.feedBox.put(feedToPut);
+                      objectbox.feedBox.put(feedToPut); // TODO: this should not be exposed to UI
                       Navigator.of(context).pop();                      
                     },
                     child: Text("Rename"),
@@ -133,11 +136,5 @@ class PopupMenuItems {
   static const rename = PopupMenuElement(text: "rename");
   static const List<PopupMenuElement> items = [delete, rename];
 }
-
-// class FeedsList extends StatelessWidget {
-//   const FeedsList({super.key});
-
-
-// }
 
 
