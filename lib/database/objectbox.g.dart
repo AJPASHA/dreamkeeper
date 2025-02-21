@@ -134,7 +134,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 4268591203767669145),
       name: 'FeedEntry',
-      lastPropertyId: const obx_int.IdUid(5, 4463150412622381682),
+      lastPropertyId: const obx_int.IdUid(6, 5299147988217474860),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -165,7 +165,12 @@ final _entities = <obx_int.ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const obx_int.IdUid(8, 1990685488086378510),
-            relationTarget: 'DreamkeeperDocument')
+            relationTarget: 'DreamkeeperDocument'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 5299147988217474860),
+            name: 'documentLastEdited',
+            type: 10,
+            flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[
@@ -389,12 +394,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (FeedEntry object, fb.Builder fbb) {
-          fbb.startTable(6);
+          fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.dateRecommendedToUser?.millisecondsSinceEpoch);
           fbb.addInt64(2, object.dateBlacklistedByUser?.millisecondsSinceEpoch);
           fbb.addInt64(3, object.feed.targetId);
           fbb.addInt64(4, object.document.targetId);
+          fbb.addInt64(5, object.documentLastEdited?.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -405,6 +411,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 6);
           final dateBlacklistedByUserValue =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
+          final documentLastEditedValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final dateRecommendedToUserParam = dateRecommendedToUserValue == null
@@ -416,7 +424,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final object = FeedEntry(
               id: idParam,
               dateRecommendedToUser: dateRecommendedToUserParam,
-              dateBlacklistedByUser: dateBlacklistedByUserParam);
+              dateBlacklistedByUser: dateBlacklistedByUserParam)
+            ..documentLastEdited = documentLastEditedValue == null
+                ? null
+                : DateTime.fromMillisecondsSinceEpoch(documentLastEditedValue);
           object.feed.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.feed.attach(store);
@@ -535,4 +546,8 @@ class FeedEntry_ {
   static final document =
       obx.QueryRelationToOne<FeedEntry, DreamkeeperDocument>(
           _entities[3].properties[4]);
+
+  /// See [FeedEntry.documentLastEdited].
+  static final documentLastEdited =
+      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[5]);
 }

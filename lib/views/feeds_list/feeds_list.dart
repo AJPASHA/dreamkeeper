@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:objectbox/objectbox.dart';
 import '../../database/model.dart';
 import '../../main.dart';
+
 /// The class for the file browser screen
 ///
 class FeedsList extends StatefulWidget {
@@ -18,30 +19,53 @@ class _FeedsListState extends State<FeedsList> {
   FeedCard Function(BuildContext context, int) _itemBuilder(List<Feed> feeds) =>
       (BuildContext context, int index) => FeedCard(feed: feeds[index]);
 
+  @override 
+  void initState() {
+    objectbox.refreshEverythingFeed();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<Feed>>(
-          key:UniqueKey(),
-          stream: objectbox.getFeeds(),
-          builder: (context, snapshot) {
-            if (snapshot.data?.isNotEmpty ?? false) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.hasData ? snapshot.data!.length : 0,
-                  itemBuilder: _itemBuilder(snapshot.data ?? []));
-            } else {
-              return const Center(
-                child: Text("Press + button to add a new feed"),
-              );
-            }
-          }),
+      body: Column(
+        children: [
+          StreamBuilder(
+              stream: objectbox.getFeeds(systemFeeds: true),
+              builder: (context, snapshot) {
+                if (snapshot.data?.isNotEmpty ?? false) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.hasData ? snapshot.data!.length : 0,
+                      itemBuilder: _itemBuilder(snapshot.data ?? []));
+                } else {
+                  return Text("Uh oh, this shouldn't be possible");
+                  // throw "Missing system Feeds!"; // TODO: make this visible once everything is set up
+                }
+              }),
+          StreamBuilder<List<Feed>>(
+              key: UniqueKey(),
+              stream: objectbox.getFeeds(),
+              builder: (context, snapshot) {
+                if (snapshot.data?.isNotEmpty ?? false) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.hasData ? snapshot.data!.length : 0,
+                      itemBuilder: _itemBuilder(snapshot.data ?? []));
+                } else {
+                  return const Center(
+                    child: Text("Press + button to add a new feed"),
+                  );
+                }
+              }),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog(
-          context: context, builder: (BuildContext context) {
-            return NewFeedDialog(newFeedTitleController: newFeedTitleController);
-          }
-        ),
+            context: context,
+            builder: (BuildContext context) {
+              return NewFeedDialog(
+                  newFeedTitleController: newFeedTitleController);
+            }),
         child: Icon(Icons.feed),
       ),
     );
@@ -63,8 +87,7 @@ class NewFeedDialog extends StatelessWidget {
       content: TextField(controller: newFeedTitleController),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(), 
-          child: Text("close")),
+            onPressed: () => Navigator.of(context).pop(), child: Text("close")),
         TextButton(
           onPressed: () {
             try {
@@ -72,11 +95,10 @@ class NewFeedDialog extends StatelessWidget {
               Navigator.of(context).pop();
             } on UniqueViolationException catch (_) {
               showDialog(
-                context: context, 
-                builder: (BuildContext context) {
-                  return FeedAlreadyExistsDialog();
-                }
-              );
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FeedAlreadyExistsDialog();
+                  });
             }
           },
           child: Text("Save"),
@@ -94,13 +116,12 @@ class FeedAlreadyExistsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("A feed with that name already exists, please come up with a new name"),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text("Close")
-        )
-      ]
-    );
+        title: Text(
+            "A feed with that name already exists, please come up with a new name"),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Close"))
+        ]);
   }
 }

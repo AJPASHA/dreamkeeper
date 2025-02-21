@@ -22,7 +22,8 @@ class _DocumentCardState extends State<DocumentCard> {
   void initState() {
     super.initState();
     document = widget.entry.document.target;
-    title = document?.title ?? document?.blocks.firstOrNull?.plaintext ?? "Unnamed document";
+    final placeholder = document?.blocks.firstOrNull?.plaintext.split('\n')[0];
+    title = document?.title ?? placeholder ?? "Unnamed document";
     isTitled = document?.title != null;
     
     
@@ -47,19 +48,24 @@ class _DocumentCardState extends State<DocumentCard> {
             ]),
         child: Padding(
             padding: EdgeInsets.all(12.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: Text(
-                      title ??
-                          "Unnamed Document",
-                      style: isTitled ? h2 : h2.copyWith(color: Colors.grey, fontStyle: FontStyle.italic)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                          title ??
+                              "Unnamed Document",
+                          style: isTitled ? h2 : h2.copyWith(color: Colors.grey, fontStyle: FontStyle.italic)),
+                    ),
+                    PopupMenuButton<PopupMenuElement>(
+                      onSelected: (item) => onPopupSelected(context, item.text),
+                      itemBuilder: (BuildContext context) =>
+                          [...PopupMenuItems.items.map(buildItem)],
+                    )
+                  ],
                 ),
-                PopupMenuButton<PopupMenuElement>(
-                  onSelected: (item) => onPopupSelected(context, item.text),
-                  itemBuilder: (BuildContext context) =>
-                      [...PopupMenuItems.items.map(buildItem)],
-                )
+                Text("Last Edited: ${document!.editedOn}")
               ],
             )),
       ),

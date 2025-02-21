@@ -110,7 +110,7 @@
     },
     {
       "id": "5:4268591203767669145",
-      "lastPropertyId": "5:4463150412622381682",
+      "lastPropertyId": "6:5299147988217474860",
       "name": "FeedEntry",
       "properties": [
         {
@@ -144,6 +144,11 @@
           "flags": 520,
           "indexId": "8:1990685488086378510",
           "relationTarget": "DreamkeeperDocument"
+        },
+        {
+          "id": "6:5299147988217474860",
+          "name": "documentLastEdited",
+          "type": 10
         }
       ],
       "relations": []

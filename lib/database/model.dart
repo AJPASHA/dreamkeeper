@@ -53,6 +53,7 @@ class FeedEntry {
   int id;
   DateTime? dateRecommendedToUser;
   DateTime? dateBlacklistedByUser;
+  DateTime? documentLastEdited; // not strictly normalised I know, but necessary due to objectbox limitations
   FeedEntry({this.id=0, this.dateRecommendedToUser, this.dateBlacklistedByUser});
   
 
