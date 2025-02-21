@@ -1,3 +1,4 @@
+import 'package:dreamkeeper/main.dart';
 import 'package:dreamkeeper/views/search/search_results.dart';
 import 'package:dreamkeeper/database/model.dart';
 import 'package:dreamkeeper/views/editor/editor.dart';
@@ -21,8 +22,7 @@ class Sitemap {
           
           // either take the document from the caller or create a new document
           DreamkeeperDocument document = args.document ??
-              DreamkeeperDocument("",
-                  createdOn: DateTime.now(), editedOn: DateTime.now());
+              objectbox.createAndGetDocument();
 
 
           if (args.fromFeed != null) { // if this route is being called from a feed, we need to create a new feed entry for the new document 
@@ -38,7 +38,7 @@ class Sitemap {
         }
         return MaterialPageRoute(
             builder: (context) => Editor(
-                  dbDocument: DreamkeeperDocument("", createdOn: DateTime.now(), editedOn: DateTime.now()),
+                  dbDocument: objectbox.createAndGetDocument(),
                 ));
       case '/feed':
         if (args is FeedArgs) {

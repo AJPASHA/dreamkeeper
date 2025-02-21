@@ -56,6 +56,10 @@ class ObjectBox {
   /// Create a document and return its id in the database
   int createDocument() => documentBox.put(DreamkeeperDocument(""));
 
+  DreamkeeperDocument createAndGetDocument() {
+    final int docId = createDocument();
+    return documentBox.get(docId)!;
+  }
 
   /// Get a document based on its id
   DreamkeeperDocument? getDocument(int id) => documentBox.get(id);

@@ -40,7 +40,6 @@ class _FeedStreamState extends State<FeedStream> {
             style: h1,
           )),
       body: StreamBuilder(
-
           stream: objectbox.getEntriesOfFeed(feed.id),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {

@@ -22,7 +22,8 @@ class _DocumentCardState extends State<DocumentCard> {
   void initState() {
     super.initState();
     document = widget.entry.document.target;
-    title = document?.title ?? document?.blocks.firstOrNull?.plaintext ?? "Unnamed document";
+    final placeholder = document?.blocks.firstOrNull?.plaintext.split('\n')[0];
+    title = document?.title ?? placeholder ?? "Unnamed document";
     isTitled = document?.title != null;
     
     
