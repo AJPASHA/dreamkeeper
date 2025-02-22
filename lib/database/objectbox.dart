@@ -275,7 +275,7 @@ class ObjectBox {
 
   /// get a list of all entries within a feed
   Stream<List<DreamkeeperDocument>> getDocsInFeed(int feedId) {
-    final builder = documentBox.query();
+    final builder = documentBox.query().order(DreamkeeperDocument_.editedOn, flags: Order.descending);
     builder.linkMany(DreamkeeperDocument_.feeds, Feed_.id.equals(feedId));
     return builder.watch(triggerImmediately: true).map((e) => e.find());
   }
