@@ -31,38 +31,10 @@ class Feed {
 
   Feed(this.title, {this.id=0, this.deletable = true, this.lastViewed}); // id=0 is a special value, which assigns the object to the first available idx
 
-  // final documents = ToMany<Document>();
-  @Backlink('feed')
-  final entries = ToMany<FeedEntry>();
+  final documents = ToMany<DreamkeeperDocument>();
 
 }
 
-@Entity()
-class FeedEntry {
-  /// Represents a document entry in a feed. This acts as a neat wrapper for document which allows us to store recommendation metadata
-  /// 
-  /// Properties:
-  /// - [id]: Unique identifier for the feed entry.
-  /// - [dateRecommendedToUser]: The date when the document was recommended to the user.
-  /// - [dateBlacklistedByUser]: The date when the user blacklisted the document.
-  /// 
-  /// Relationships:
-  /// - [feed]: A reference to the Feed that this entry belongs to.
-  /// - [document]: a reference to the document that this entry represents
-  @Id()
-  int id;
-  DateTime? dateRecommendedToUser;
-  DateTime? dateBlacklistedByUser;
-  DateTime? documentLastEdited; // not strictly normalised I know, but necessary due to objectbox limitations
-  FeedEntry({this.id=0, this.dateRecommendedToUser, this.dateBlacklistedByUser});
-  
-
-  final feed = ToOne<Feed>();
-  final document = ToOne<DreamkeeperDocument>();
-
-  @Backlink('entries')
-  final blocks = ToMany<DocumentBlock>();
-}
 
 @Entity()
 class DreamkeeperDocument {
@@ -95,9 +67,11 @@ class DreamkeeperDocument {
     return List<Map<String, dynamic>>.from(jsonDecode(content));
   }
 
+  // @Backlink('documents')
+  final feeds = ToMany<Feed>();
 
-  @Backlink('document')
-  final entries = ToMany<FeedEntry>();
+  // @Backlink('document')
+  // final entries = ToMany<FeedEntry>();
 
   @Backlink('document')
   final blocks = ToMany<DocumentBlock>();
@@ -133,9 +107,6 @@ class DocumentBlock {
 
   final document = ToOne<DreamkeeperDocument>();
 
-
-
-  final entries = ToMany<FeedEntry>();
 }
 
 // // TODO: change the length of the embedding field based on size of model being used

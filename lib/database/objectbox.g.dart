@@ -52,12 +52,7 @@ final _entities = <obx_int.ModelEntity>[
               dimensions: 1024,
             ))
       ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 5080214140499351460),
-            name: 'entries',
-            targetId: const obx_int.IdUid(5, 4268591203767669145))
-      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 6764158569011806594),
@@ -91,10 +86,13 @@ final _entities = <obx_int.ModelEntity>[
             type: 9,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(2, 1968626357904876502),
+            name: 'feeds',
+            targetId: const obx_int.IdUid(4, 3826825930516348685))
+      ],
       backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'entries', srcEntity: 'FeedEntry', srcField: 'document'),
         obx_int.ModelBacklink(
             name: 'blocks', srcEntity: 'DocumentBlock', srcField: 'document')
       ]),
@@ -126,57 +124,13 @@ final _entities = <obx_int.ModelEntity>[
             type: 10,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'entries', srcEntity: 'FeedEntry', srcField: 'feed')
-      ]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(5, 4268591203767669145),
-      name: 'FeedEntry',
-      lastPropertyId: const obx_int.IdUid(6, 5299147988217474860),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 6846171265697844033),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3081139390239739271),
-            name: 'dateRecommendedToUser',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8278152135356203481),
-            name: 'dateBlacklistedByUser',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 1896977186017631673),
-            name: 'feedId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(7, 74432198457267664),
-            relationTarget: 'Feed'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 4463150412622381682),
-            name: 'documentId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(8, 1990685488086378510),
-            relationTarget: 'DreamkeeperDocument'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 5299147988217474860),
-            name: 'documentLastEdited',
-            type: 10,
-            flags: 0)
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(3, 7927619773142596319),
+            name: 'documents',
+            targetId: const obx_int.IdUid(3, 6764158569011806594))
       ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'blocks', srcEntity: 'DocumentBlock', srcField: 'entries')
-      ])
+      backlinks: <obx_int.ModelBacklink>[])
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -216,9 +170,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const obx_int.IdUid(5, 4268591203767669145),
       lastIndexId: const obx_int.IdUid(9, 2709633154347540740),
-      lastRelationId: const obx_int.IdUid(1, 5080214140499351460),
+      lastRelationId: const obx_int.IdUid(3, 7927619773142596319),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [869866442667580768],
+      retiredEntityUids: const [869866442667580768, 4268591203767669145],
       retiredIndexUids: const [6115012636440699710],
       retiredPropertyUids: const [
         7038815928080113058,
@@ -227,9 +181,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         6603946342748197489,
         6144097006031577889,
         1320742463321956039,
-        7768266513124934083
+        7768266513124934083,
+        6846171265697844033,
+        3081139390239739271,
+        8278152135356203481,
+        1896977186017631673,
+        4463150412622381682,
+        5299147988217474860
       ],
-      retiredRelationUids: const [],
+      retiredRelationUids: const [5080214140499351460],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
@@ -238,10 +198,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     DocumentBlock: obx_int.EntityDefinition<DocumentBlock>(
         model: _entities[0],
         toOneRelations: (DocumentBlock object) => [object.document],
-        toManyRelations: (DocumentBlock object) => {
-              obx_int.RelInfo<DocumentBlock>.toMany(1, object.id):
-                  object.entries
-            },
+        toManyRelations: (DocumentBlock object) => {},
         getId: (DocumentBlock object) => object.id,
         setId: (DocumentBlock object, int id) {
           object.id = id;
@@ -274,16 +231,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.document.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.document.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<DocumentBlock>(object.entries,
-              store, obx_int.RelInfo<DocumentBlock>.toMany(1, object.id));
           return object;
         }),
     DreamkeeperDocument: obx_int.EntityDefinition<DreamkeeperDocument>(
         model: _entities[1],
         toOneRelations: (DreamkeeperDocument object) => [],
         toManyRelations: (DreamkeeperDocument object) => {
-              obx_int.RelInfo<FeedEntry>.toOneBacklink(5, object.id,
-                  (FeedEntry srcObject) => srcObject.document): object.entries,
+              obx_int.RelInfo<DreamkeeperDocument>.toMany(2, object.id):
+                  object.feeds,
               obx_int.RelInfo<DocumentBlock>.toOneBacklink(4, object.id,
                       (DocumentBlock srcObject) => srcObject.document):
                   object.blocks
@@ -324,10 +279,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               createdOn: createdOnParam,
               editedOn: editedOnParam);
           obx_int.InternalToManyAccess.setRelInfo<DreamkeeperDocument>(
-              object.entries,
+              object.feeds,
               store,
-              obx_int.RelInfo<FeedEntry>.toOneBacklink(
-                  5, object.id, (FeedEntry srcObject) => srcObject.document));
+              obx_int.RelInfo<DreamkeeperDocument>.toMany(2, object.id));
           obx_int.InternalToManyAccess.setRelInfo<DreamkeeperDocument>(
               object.blocks,
               store,
@@ -338,11 +292,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
     Feed: obx_int.EntityDefinition<Feed>(
         model: _entities[2],
         toOneRelations: (Feed object) => [],
-        toManyRelations: (Feed object) => {
-              obx_int.RelInfo<FeedEntry>.toOneBacklink(
-                      4, object.id, (FeedEntry srcObject) => srcObject.feed):
-                  object.entries
-            },
+        toManyRelations: (Feed object) =>
+            {obx_int.RelInfo<Feed>.toMany(3, object.id): object.documents},
         getId: (Feed object) => object.id,
         setId: (Feed object, int id) {
           object.id = id;
@@ -375,69 +326,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               id: idParam,
               deletable: deletableParam,
               lastViewed: lastViewedParam);
-          obx_int.InternalToManyAccess.setRelInfo<Feed>(
-              object.entries,
-              store,
-              obx_int.RelInfo<FeedEntry>.toOneBacklink(
-                  4, object.id, (FeedEntry srcObject) => srcObject.feed));
-          return object;
-        }),
-    FeedEntry: obx_int.EntityDefinition<FeedEntry>(
-        model: _entities[3],
-        toOneRelations: (FeedEntry object) => [object.feed, object.document],
-        toManyRelations: (FeedEntry object) => {
-              obx_int.RelInfo<DocumentBlock>.toManyBacklink(1, object.id):
-                  object.blocks
-            },
-        getId: (FeedEntry object) => object.id,
-        setId: (FeedEntry object, int id) {
-          object.id = id;
-        },
-        objectToFB: (FeedEntry object, fb.Builder fbb) {
-          fbb.startTable(7);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.dateRecommendedToUser?.millisecondsSinceEpoch);
-          fbb.addInt64(2, object.dateBlacklistedByUser?.millisecondsSinceEpoch);
-          fbb.addInt64(3, object.feed.targetId);
-          fbb.addInt64(4, object.document.targetId);
-          fbb.addInt64(5, object.documentLastEdited?.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final dateRecommendedToUserValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 6);
-          final dateBlacklistedByUserValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
-          final documentLastEditedValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final dateRecommendedToUserParam = dateRecommendedToUserValue == null
-              ? null
-              : DateTime.fromMillisecondsSinceEpoch(dateRecommendedToUserValue);
-          final dateBlacklistedByUserParam = dateBlacklistedByUserValue == null
-              ? null
-              : DateTime.fromMillisecondsSinceEpoch(dateBlacklistedByUserValue);
-          final object = FeedEntry(
-              id: idParam,
-              dateRecommendedToUser: dateRecommendedToUserParam,
-              dateBlacklistedByUser: dateBlacklistedByUserParam)
-            ..documentLastEdited = documentLastEditedValue == null
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(documentLastEditedValue);
-          object.feed.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          object.feed.attach(store);
-          object.document.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          object.document.attach(store);
-          obx_int.InternalToManyAccess.setRelInfo<FeedEntry>(
-              object.blocks,
-              store,
-              obx_int.RelInfo<DocumentBlock>.toManyBacklink(1, object.id));
+          obx_int.InternalToManyAccess.setRelInfo<Feed>(object.documents, store,
+              obx_int.RelInfo<Feed>.toMany(3, object.id));
           return object;
         })
   };
@@ -463,10 +353,6 @@ class DocumentBlock_ {
   /// See [DocumentBlock.vector].
   static final vector =
       obx.QueryHnswProperty<DocumentBlock>(_entities[0].properties[3]);
-
-  /// see [DocumentBlock.entries]
-  static final entries = obx.QueryRelationToMany<DocumentBlock, FeedEntry>(
-      _entities[0].relations[0]);
 }
 
 /// [DreamkeeperDocument] entity fields to define ObjectBox queries.
@@ -491,10 +377,9 @@ class DreamkeeperDocument_ {
   static final title =
       obx.QueryStringProperty<DreamkeeperDocument>(_entities[1].properties[4]);
 
-  /// see [DreamkeeperDocument.entries]
-  static final entries =
-      obx.QueryBacklinkToMany<FeedEntry, DreamkeeperDocument>(
-          FeedEntry_.document);
+  /// see [DreamkeeperDocument.feeds]
+  static final feeds = obx.QueryRelationToMany<DreamkeeperDocument, Feed>(
+      _entities[1].relations[0]);
 
   /// see [DreamkeeperDocument.blocks]
   static final blocks =
@@ -519,35 +404,7 @@ class Feed_ {
   static final lastViewed =
       obx.QueryDateProperty<Feed>(_entities[2].properties[3]);
 
-  /// see [Feed.entries]
-  static final entries =
-      obx.QueryBacklinkToMany<FeedEntry, Feed>(FeedEntry_.feed);
-}
-
-/// [FeedEntry] entity fields to define ObjectBox queries.
-class FeedEntry_ {
-  /// See [FeedEntry.id].
-  static final id =
-      obx.QueryIntegerProperty<FeedEntry>(_entities[3].properties[0]);
-
-  /// See [FeedEntry.dateRecommendedToUser].
-  static final dateRecommendedToUser =
-      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[1]);
-
-  /// See [FeedEntry.dateBlacklistedByUser].
-  static final dateBlacklistedByUser =
-      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[2]);
-
-  /// See [FeedEntry.feed].
-  static final feed =
-      obx.QueryRelationToOne<FeedEntry, Feed>(_entities[3].properties[3]);
-
-  /// See [FeedEntry.document].
-  static final document =
-      obx.QueryRelationToOne<FeedEntry, DreamkeeperDocument>(
-          _entities[3].properties[4]);
-
-  /// See [FeedEntry.documentLastEdited].
-  static final documentLastEdited =
-      obx.QueryDateProperty<FeedEntry>(_entities[3].properties[5]);
+  /// see [Feed.documents]
+  static final documents = obx.QueryRelationToMany<Feed, DreamkeeperDocument>(
+      _entities[2].relations[0]);
 }

@@ -6,8 +6,8 @@ import '../../../main.dart';
 import '../../_shared/popup_menu_element.dart';
 
 class DocumentCard extends StatefulWidget {
-  final FeedEntry entry;
-  const DocumentCard({super.key, required this.entry});
+  final DreamkeeperDocument document;
+  const DocumentCard({super.key, required this.document});
 
   @override
   State<DocumentCard> createState() => _DocumentCardState();
@@ -21,7 +21,7 @@ class _DocumentCardState extends State<DocumentCard> {
   @override
   void initState() {
     super.initState();
-    document = widget.entry.document.target;
+    document = widget.document;
     final placeholder = document?.blocks.firstOrNull?.plaintext.split('\n')[0];
     title = document?.title ?? placeholder ?? "Unnamed document";
     isTitled = document?.title != null;

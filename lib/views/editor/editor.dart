@@ -82,16 +82,10 @@ class _EditorState extends State<Editor> {
             child: Wrap(
               runSpacing: 8,
               spacing: 8,
-              children: _document.entries.map((entry) { // change this to work based on a db query so that it is stateful
+              children: _document.feeds.where((e) => e.deletable == true,).map((feed) { // change this to work based on a db query so that it is stateful
                 return InputChip(
-                  label: Text(entry.feed.target?.title ?? ""),
-                  onPressed: () {
-                    if (entry.feed.target != null) {
-                      Navigator.of(context).pushNamed('/feed', arguments: FeedArgs(entry.feed.target!));
-                    } else {
-                      debugPrint("Somehow we've got a feed entry without a feed!");
-                    }
-                  },
+                  label: Text(feed.title),
+                  onPressed: () => Navigator.of(context).pushNamed('/feed', arguments: FeedArgs(feed)),
                 );
               }).toList() + [InputChip(
                 avatar: const Icon(Icons.add),

@@ -14,10 +14,8 @@ class FeedPicker extends StatefulWidget {
 class _FeedPickerState extends State<FeedPicker> {
   late DreamkeeperDocument _document;
 
-  List<int> get documentFeeds => _document.entries
-      .where((e) => e.feed.target != null)
-      .map((e) => e.feed.target!.id)
-      .toList();
+  List<int> get documentFeeds => _document.feeds
+      .map((e) => e.id).toList();
 
   bool docIsInFeed(int feedId) => documentFeeds.contains(feedId);
 
@@ -51,9 +49,9 @@ class _FeedPickerState extends State<FeedPicker> {
                     onChanged: (bool? newValue) => setState(() {
                       final feedId = snapshot.data![index].id;
                       if (newValue ?? false) {
-                        objectbox.addEntry(_document.id, feedId);
+                        objectbox.addDocumentToFeed(_document.id, feedId);
                       } else {
-                        objectbox.deleteEntryFromDetails(_document.id, feedId);
+                        objectbox.removeDocumentFromFeed(_document.id, feedId);
                       }
                     }),
                   ),

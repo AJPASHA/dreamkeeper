@@ -26,9 +26,7 @@ class Sitemap {
 
 
           if (args.fromFeed != null) { // if this route is being called from a feed, we need to create a new feed entry for the new document 
-            final FeedEntry entry = FeedEntry();
-            entry.feed.target = args.fromFeed;
-            document.entries.add(entry);
+            document.feeds.add(args.fromFeed!);
           }
 
           return MaterialPageRoute(
