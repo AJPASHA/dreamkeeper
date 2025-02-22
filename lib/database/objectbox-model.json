@@ -1,0 +1,129 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2550714529681654902",
+      "lastPropertyId": "4:4561867084711585162",
+      "name": "DocumentBlock",
+      "properties": [
+        {
+          "id": "1:4293666752605574427",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1880066545046981447",
+          "name": "content",
+          "type": 9
+        },
+        {
+          "id": "3:2116273413801169120",
+          "name": "vector",
+          "type": 28,
+          "flags": 8,
+          "indexId": "1:4139313523194412243"
+        },
+        {
+          "id": "4:4561867084711585162",
+          "name": "documentId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:5669014280078194457",
+          "relationTarget": "DreamkeeperDocument"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:2694490381982013870",
+      "lastPropertyId": "5:2729565078585294046",
+      "name": "DreamkeeperDocument",
+      "properties": [
+        {
+          "id": "1:8600596806654833717",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8146804532972953438",
+          "name": "content",
+          "type": 9
+        },
+        {
+          "id": "3:5309799274296506429",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "4:2449374732383508174",
+          "name": "createdOn",
+          "type": 10
+        },
+        {
+          "id": "5:2729565078585294046",
+          "name": "editedOn",
+          "type": 10
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:6886158495009755872",
+          "name": "feeds",
+          "targetId": "3:1677947586682076815"
+        }
+      ]
+    },
+    {
+      "id": "3:1677947586682076815",
+      "lastPropertyId": "4:6605737280085307757",
+      "name": "Feed",
+      "properties": [
+        {
+          "id": "1:5261763014878325340",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3600380474713715828",
+          "name": "title",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "3:6721718574364101340"
+        },
+        {
+          "id": "3:5349904091751461740",
+          "name": "deletable",
+          "type": 1
+        },
+        {
+          "id": "4:6605737280085307757",
+          "name": "lastViewed",
+          "type": 10
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:4711498794231977104",
+          "name": "documents",
+          "targetId": "2:2694490381982013870"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "3:1677947586682076815",
+  "lastIndexId": "3:6721718574364101340",
+  "lastRelationId": "2:4711498794231977104",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
