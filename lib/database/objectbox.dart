@@ -12,7 +12,6 @@ class ObjectBox {
   late final Store store;
 
   late final Box<Feed> feedBox;
-  late final Box<FeedEntry> feedEntryBox;
   late final Box<DreamkeeperDocument> documentBox;
   late final Box<DocumentBlock> blockBox;
 
@@ -23,7 +22,6 @@ class ObjectBox {
 
   ObjectBox._create(this.store) {
     feedBox = Box<Feed>(store);
-    feedEntryBox = Box<FeedEntry>(store);
     documentBox = Box<DreamkeeperDocument>(store);
     blockBox = Box<DocumentBlock>(store);
 
@@ -41,11 +39,6 @@ class ObjectBox {
     DreamkeeperDocument document1 = DreamkeeperDocument(
         r'[{"insert":"Demo File"},{"insert":"\n","attributes":{"header":1}},{"insert":"\nLorum Ipsum dolor est.\n\nThis is a list"},{"insert":"\n","attributes":{"list":"ordered"}},{"insert":"This is a list inside a list"},{"insert":"\n","attributes":{"list":"ordered","indent":1}},{"insert":"This is a checkbox"},{"insert":"\n","attributes":{"list":"unchecked"}},{"insert":"This is a ticked checkbox"},{"insert":"\n","attributes":{"list":"checked"}},{"insert":"This is a ticked checkbox within a checkbox "},{"insert":"\n","attributes":{"list":"checked","indent":1}},{"insert":"\n"}]');
     document1.blocks.addAll(_getBlocksFromDocument(document1));
-
-    FeedEntry feedEntry = FeedEntry();
-    feedEntry.document.target = document1;
-
-    feed1.entries.add(feedEntry);
 
     feedBox.put(feed1);
   }
@@ -97,7 +90,6 @@ class ObjectBox {
     if (!documentBox.contains(id)) {return;}
     store.runInTransaction(TxMode.write, () {
       blockBox.query(DocumentBlock_.document.equals(id)).build().remove();
-      feedEntryBox.query(FeedEntry_.document.equals(id)).build().remove();
       documentBox.remove(id);
     });
   }
@@ -246,25 +238,29 @@ class ObjectBox {
   int createFeed(String title) => feedBox.put(Feed(title));
 
   /// add a feed entry based on the ids of the document, feed and whether the system recommeded
-  int addEntry(int documentId, int feedId, {bool? systemRecommended = false}) {
-    FeedEntry entry = FeedEntry(
-        dateRecommendedToUser:
-            (systemRecommended ?? false) ? DateTime.now() : null);
-    entry.document.targetId = documentId;
-    entry.feed.targetId = feedId;
+  void addDocumentToFeed(int documentId, int feedId, {bool? systemRecommended = false}) {
+    final document = documentBox.get(documentId);
+    if (document == null) { throw "Error trying to add non-existant document to feed!"; }
+    final feed = feedBox.get(feedId);
+    if (feed == null) { throw "Error trying to add document to non-existant feed!"; }
 
-    return feedEntryBox.put(entry);
+    document.feeds.add(feed);
+    
+    documentBox.put(document);
+
+    return;
   }
 
-  void deleteEntryFromDetails(int documentId, int feedId) {
-    var builder = feedEntryBox
-      .query(FeedEntry_.document.equals(documentId)
-        .and(FeedEntry_.feed.equals(feedId)))
-      .build();
+  void removeDocumentFromFeed(int documentId, int feedId) {
+    final document = documentBox.get(documentId);
+    if (document == null) { throw "Error trying to remove non-existant document from feed!"; }
+    final feed = feedBox.get(feedId);
+    if (feed == null) { throw "Error trying to remove document from non-existant feed!"; }
 
-    builder.remove();
+    document.feeds.remove(feed);
 
-      
+    documentBox.put(document);
+    return;
   }
 
 
@@ -278,10 +274,10 @@ class ObjectBox {
   }
 
   /// get a list of all entries within a feed
-  Stream<List<FeedEntry>> getEntriesOfFeed(int feedId) {
-    final builder = feedEntryBox.query(FeedEntry_.feed.equals(feedId));
-    builder.link(FeedEntry_.document);
-    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  Stream<List<DreamkeeperDocument>> getDocsInFeed(int feedId) {
+    final builder = documentBox.query();
+    builder.linkMany(DreamkeeperDocument_.feeds, Feed_.id.equals(feedId));
+    return builder.watch(triggerImmediately: true).map((e) => e.find());
   }
 
 
@@ -296,32 +292,12 @@ class ObjectBox {
       everythingFeed = feedBox.get(everythingId);
     }
 
-    // get the documents that don't have an entry in the document
-    Set<int> documentIds = documentBox.query().build().findIds().toSet();
-
-    // get the documents that are already in the everything feed 
-    Set<int> docsInFeed = feedEntryBox
-        .query(FeedEntry_.feed.equals(everythingFeed!.id))
-        .build()
-        .find()
-        .map((e) => e.document.targetId)
-        .toSet();
-        
-    // get those which need updating
-    Set<int> documentsToAdd = documentIds.difference(docsInFeed);
-    //perform the entry
-    for (int id in documentsToAdd) {
-      addEntry(id, everythingFeed.id);
+    final documents = documentBox.getAll();
+    
+    for (DreamkeeperDocument document in documents) {
+      document.feeds.add(everythingFeed!);
+      documentBox.put(document);
     }
-
-    // get those which need deleting (normally this is handled by document deletion, good to be sure though!)
-    Set<int> documentsToDelete = docsInFeed.difference(documentIds);
-    // perform deletion
-    for (int id in documentsToDelete) {
-      deleteEntryFromDetails(id, everythingFeed.id);
-    }
-
-
     return;
   }
 }

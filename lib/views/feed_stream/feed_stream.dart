@@ -15,16 +15,19 @@ class FeedStream extends StatefulWidget {
 
 class _FeedStreamState extends State<FeedStream> {
   late final Feed feed;
-  DocumentCard Function(BuildContext, int) _itemBuilder(List<FeedEntry> entries) {
+  DocumentCard Function(BuildContext, int) _itemBuilder(
+      List<DreamkeeperDocument> documents) {
     return (BuildContext context, int index) =>
-        DocumentCard(entry: entries[index]);
+        DocumentCard(document: documents[index]);
   }
+
   @override
   void initState() {
     feed = widget.feed;
     // objectbox.getEntries(feed.id);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +35,7 @@ class _FeedStreamState extends State<FeedStream> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context,true);
+              Navigator.pop(context, true);
             },
           ),
           title: Text(
@@ -40,12 +43,13 @@ class _FeedStreamState extends State<FeedStream> {
             style: h1,
           )),
       body: StreamBuilder(
-          stream: objectbox.getEntriesOfFeed(feed.id),
+          stream: objectbox.getDocsInFeed(feed.id),
           builder: (context, snapshot) {
+            debugPrint("${snapshot.data}");
             if (snapshot.data?.isNotEmpty ?? false) {
               return ListView.builder(
-        key: UniqueKey(),
-        shrinkWrap: true,
+                  key: UniqueKey(),
+                  shrinkWrap: true,
                   itemCount: snapshot.hasData ? snapshot.data!.length : 0,
                   itemBuilder: _itemBuilder(snapshot.data ?? []));
             } else {
@@ -58,7 +62,7 @@ class _FeedStreamState extends State<FeedStream> {
         onPressed: () async {
           final result = await Navigator.of(context).pushNamed('/editor',
               arguments: EditorArgs(fromFeed: widget.feed));
-          if(result == true) {
+          if (result == true) {
             setState(() {});
           }
         },
