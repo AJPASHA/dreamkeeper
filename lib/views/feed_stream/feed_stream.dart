@@ -24,6 +24,7 @@ class _FeedStreamState extends State<FeedStream> {
   @override
   void initState() {
     feed = widget.feed;
+    objectbox.refreshEverythingFeed();
     // objectbox.getEntries(feed.id);
     super.initState();
   }
@@ -45,7 +46,6 @@ class _FeedStreamState extends State<FeedStream> {
       body: StreamBuilder(
           stream: objectbox.getDocsInFeed(feed.id),
           builder: (context, snapshot) {
-            debugPrint("${snapshot.data}");
             if (snapshot.data?.isNotEmpty ?? false) {
               return ListView.builder(
                   key: UniqueKey(),

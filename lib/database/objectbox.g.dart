@@ -20,115 +20,115 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 2550714529681654902),
+      id: const obx_int.IdUid(1, 5160803967894572273),
       name: 'DocumentBlock',
-      lastPropertyId: const obx_int.IdUid(4, 4561867084711585162),
+      lastPropertyId: const obx_int.IdUid(4, 4374269774068074405),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 4293666752605574427),
+            id: const obx_int.IdUid(1, 286520788318648883),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 1880066545046981447),
+            id: const obx_int.IdUid(2, 2824973029297110507),
             name: 'content',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2116273413801169120),
+            id: const obx_int.IdUid(3, 2545257375469238503),
             name: 'vector',
             type: 28,
             flags: 8,
-            indexId: const obx_int.IdUid(1, 4139313523194412243),
+            indexId: const obx_int.IdUid(1, 7643045433968466442),
             hnswParams: obx_int.ModelHnswParams(
               dimensions: 1024,
             )),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4561867084711585162),
+            id: const obx_int.IdUid(4, 4374269774068074405),
             name: 'documentId',
             type: 11,
             flags: 520,
-            indexId: const obx_int.IdUid(2, 5669014280078194457),
+            indexId: const obx_int.IdUid(2, 8379984164757341259),
             relationTarget: 'DreamkeeperDocument')
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(2, 2694490381982013870),
+      id: const obx_int.IdUid(2, 6932853080183930859),
       name: 'DreamkeeperDocument',
-      lastPropertyId: const obx_int.IdUid(5, 2729565078585294046),
+      lastPropertyId: const obx_int.IdUid(5, 2278945153772423903),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 8600596806654833717),
+            id: const obx_int.IdUid(1, 2916785301380712318),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 8146804532972953438),
+            id: const obx_int.IdUid(2, 4224034997277270445),
             name: 'content',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5309799274296506429),
+            id: const obx_int.IdUid(3, 6158776757132200060),
             name: 'title',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 2449374732383508174),
+            id: const obx_int.IdUid(4, 4480100527137711818),
             name: 'createdOn',
             type: 10,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 2729565078585294046),
+            id: const obx_int.IdUid(5, 2278945153772423903),
             name: 'editedOn',
             type: 10,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 6886158495009755872),
+            id: const obx_int.IdUid(1, 8522359964141395799),
             name: 'feeds',
-            targetId: const obx_int.IdUid(3, 1677947586682076815))
+            targetId: const obx_int.IdUid(3, 7817565423682083651))
       ],
       backlinks: <obx_int.ModelBacklink>[
         obx_int.ModelBacklink(
             name: 'blocks', srcEntity: 'DocumentBlock', srcField: 'document')
       ]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 1677947586682076815),
+      id: const obx_int.IdUid(3, 7817565423682083651),
       name: 'Feed',
-      lastPropertyId: const obx_int.IdUid(4, 6605737280085307757),
+      lastPropertyId: const obx_int.IdUid(4, 3373702657818678580),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5261763014878325340),
+            id: const obx_int.IdUid(1, 6096996843882837857),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3600380474713715828),
+            id: const obx_int.IdUid(2, 7429113614455195322),
             name: 'title',
             type: 9,
             flags: 2080,
-            indexId: const obx_int.IdUid(3, 6721718574364101340)),
+            indexId: const obx_int.IdUid(3, 5804535562499356546)),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5349904091751461740),
+            id: const obx_int.IdUid(3, 3631699020706762120),
             name: 'deletable',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 6605737280085307757),
+            id: const obx_int.IdUid(4, 3373702657818678580),
             name: 'lastViewed',
             type: 10,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
         obx_int.ModelRelation(
-            id: const obx_int.IdUid(2, 4711498794231977104),
+            id: const obx_int.IdUid(2, 8356477906894837800),
             name: 'documents',
-            targetId: const obx_int.IdUid(2, 2694490381982013870))
+            targetId: const obx_int.IdUid(2, 6932853080183930859))
       ],
       backlinks: <obx_int.ModelBacklink>[])
 ];
@@ -168,9 +168,9 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(3, 1677947586682076815),
-      lastIndexId: const obx_int.IdUid(3, 6721718574364101340),
-      lastRelationId: const obx_int.IdUid(2, 4711498794231977104),
+      lastEntityId: const obx_int.IdUid(3, 7817565423682083651),
+      lastIndexId: const obx_int.IdUid(3, 5804535562499356546),
+      lastRelationId: const obx_int.IdUid(2, 8356477906894837800),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],

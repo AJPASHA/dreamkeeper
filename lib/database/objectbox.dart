@@ -51,8 +51,14 @@ class ObjectBox {
   /// Create a document and return its id in the database
   int createDocument() => documentBox.put(DreamkeeperDocument(""));
 
-  DreamkeeperDocument createAndGetDocument() {
+  DreamkeeperDocument createAndGetDocument({Feed? fromFeed}) {
     final int docId = createDocument();
+    
+    if (fromFeed != null) { // If we are generating the document from a feed, we add this here
+      final document = documentBox.get(docId);
+      document!.feeds.add(fromFeed);
+      documentBox.put(document);
+    }
     return documentBox.get(docId)!;
   }
 
@@ -144,7 +150,6 @@ class ObjectBox {
       components.insertAll(indexToChunk, [left, right]);
       // components.replaceRange(indexToChunk, indexToChunk, [left, right]);
       counts = wordcounts();
-      debugPrint("$counts");
     }
 
     /* Step 2: define subdocument split points */

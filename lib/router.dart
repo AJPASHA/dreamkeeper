@@ -22,12 +22,7 @@ class Sitemap {
           
           // either take the document from the caller or create a new document
           DreamkeeperDocument document = args.document ??
-              objectbox.createAndGetDocument();
-
-
-          if (args.fromFeed != null) { // if this route is being called from a feed, we need to create a new feed entry for the new document 
-            document.feeds.add(args.fromFeed!);
-          }
+              objectbox.createAndGetDocument(fromFeed: args.fromFeed);
 
           return MaterialPageRoute(
               builder: (context) => Editor(

@@ -21,7 +21,7 @@ class _FeedsListState extends State<FeedsList> {
 
   @override 
   void initState() {
-    objectbox.refreshEverythingFeed();
+
     super.initState();
   }
   @override
